@@ -11,7 +11,7 @@ const LogIn = ({ navigation }) => {
   const logIn = async () => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      navigation.navigate("Form");
+      navigation.navigate("Welcome");
     } catch (e) {
       alert(e.message);
     }
