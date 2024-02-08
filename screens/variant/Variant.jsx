@@ -1,7 +1,7 @@
 import { Text, View, StyleSheet, ScrollView } from "react-native";
 import Cards from "./Cards";
 import options from "./cars";
-import useAuth from "../../hooks/useAuth";
+import useAuth from "../../hooks/AuthContext";
 
 const Variant = () => {
   const {user} = useAuth();

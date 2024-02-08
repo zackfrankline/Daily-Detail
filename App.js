@@ -2,7 +2,7 @@ import { StyleSheet } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 
 import StackNavigator from "./StackNavigator";
-import { AuthProvider } from "./hooks/useAuth";
+import { AuthProvider } from "./hooks/AuthContext"; 
 
 export default function App() {
   return (

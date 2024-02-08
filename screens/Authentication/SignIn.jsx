@@ -1,64 +1,78 @@
-import { useState } from "react";
-import { StyleSheet, View, Text, TextInput, Pressable } from "react-native";
-import { FIREBASE_AUTH } from "../../config/firebaseConfig";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { useContext, useState } from "react";
+import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+
+import {
+  signInUserWithEmailAndPassword,
+  signOutUser,
+} from "../../config/fireabse.utils";
+
+import { AuthContext } from "../../hooks/AuthContext";
 
 const SignIn = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const auth = FIREBASE_AUTH;
 
-  const signUp = async () => {
-    try {
-      await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-      navigation.navigate("LogIn");
-    } catch (e) {
-      console.log("error:" + e.message);
-    } finally {
-      console.log(email + " " + password);
-    }
+  const { currentUser } = useContext(AuthContext);
+
+  const handleSignIn = async () => {
+    const { user } = await signInUserWithEmailAndPassword(email, password);
+    console.log(user);
+  };
+
+  const handleSignOut = async () => {
+    await signOutUser();
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.titleText}>Create Your Account</Text>
-      <TextInput
-        style={styles.textInput}
-        value={email}
-        placeholder="Enter Email"
-        onChangeText={(val) => {
-          setEmail(val);
-        }}
-      />
-      <TextInput
-        style={styles.textInput}
-        value={password}
-        placeholder="Enter Password"
-        onChangeText={(val) => {
-          setPassword(val);
-        }}
-        secureTextEntry={true}
-      />
-      <TextInput
-        style={styles.textInput}
-        value={confirmPassword}
-        placeholder="Confirm Password"
-        onChangeText={(val) => {
-          setConfirmPassword(val);
-        }}
-        secureTextEntry={true}
-      />
-      <Pressable style={styles.button} onPress={signUp}>
-        <Text style={styles.buttonText}>Sign Up</Text>
-      </Pressable>
+      {currentUser ? (
+        <>
+          <Text>You're Logged In</Text>
+          {/* signOut Button */}
+          <Pressable style={styles.button} onPress={handleSignOut}>
+            <Text style={styles.buttonText}>Sign Out</Text>
+          </Pressable>
+        </>
+      ) : (
+        <>
+          <Text style={{ fontSize: 20, letterSpacing: 1 }}>
+            Enter Credential
+          </Text>
+          <TextInput
+            style={styles.textInput}
+            placeholder="Email"
+            value={email}
+            onChangeText={(val) => {
+              setEmail(val);
+            }}
+          />
+          <TextInput
+            style={styles.textInput}
+            placeholder="password"
+            value={password}
+            onChangeText={(val) => {
+              setPassword(val);
+            }}
+            secureTextEntry={true}
+          />
+          <Pressable style={styles.button} onPress={handleSignIn}>
+            <Text style={styles.buttonText}>Log In</Text>
+          </Pressable>
+          <Pressable
+            style={styles.SignUpButton}
+            onPress={() => {
+              navigation.navigate("SignUp");
+            }}
+          >
+            <Text style={styles.SignUp}>Don't have an Account? Sign Up</Text>
+          </Pressable>
+        </>
+      )}
     </View>
   );
 };
+
+export default SignIn;
 
 const styles = StyleSheet.create({
   container: {
@@ -76,12 +90,6 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     marginTop: 20,
   },
-  titleText: {
-    fontSize: 20,
-    marginTop: 10,
-    fontWeight: "bold",
-    fontFamily: "sans-serif",
-  },
   button: {
     marginTop: 25,
     backgroundColor: "#4f5b66",
@@ -91,10 +99,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 10,
   },
+  SignUpButton: {
+    marginTop: 7,
+  },
+  SignUp: {
+    color: "#00a6fb",
+  },
   buttonText: {
     color: "#fff",
     letterSpacing: 1,
   },
 });
-
-export default SignIn;

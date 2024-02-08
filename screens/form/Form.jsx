@@ -46,6 +46,10 @@ const Form = ({ navigation }) => {
     parking: "",
   });
 
+  const handleFormSubmit = () =>{
+    console.log(userData);
+  }
+
   const handleChange = (id,val) => {
     setUserData({...userData,[id]:val})
     console.log(userData[id]);
@@ -54,14 +58,23 @@ const Form = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.formTitle}>Enter Details</Text>
-      {
-        labels.map((label)=>
-          <Input key={label.id} id={label.id} name={label.name} handleChange={handleChange}/>
-        )
-      }
-      <Pressable
+      {labels.map((label) => (
+        <Input
+          key={label.id}
+          id={label.id}
+          name={label.name}
+          handleChange={handleChange}
+        />
+      ))}
+      {/* <Pressable
         style={styles.button}
         onPress={() => navigation.navigate("Variant")}
+      >
+        <Text style={styles.buttonText}>Next</Text>
+      </Pressable> */}
+      <Pressable
+        style={styles.button}
+        onPress={handleFormSubmit}
       >
         <Text style={styles.buttonText}>Next</Text>
       </Pressable>

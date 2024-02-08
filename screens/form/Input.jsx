@@ -1,8 +1,8 @@
 import { View, TextInput, StyleSheet } from "react-native";
-import { forwardRef, useState } from "react";
+import { useState } from "react";
 
-const Input = ({ id,name,handleChange }) => {
-    const [data,setData] = useState("")
+const Input = ({ id, name, handleChange }) => {
+  const [data, setData] = useState("");
   return (
     <View>
       <TextInput
@@ -10,8 +10,8 @@ const Input = ({ id,name,handleChange }) => {
         style={styles.textInput}
         placeholder={name}
         value={data}
-        onChangeText={(val)=>setData(val)}
-        onSubmitEditing={(val)=>handleChange(id,val.nativeEvent.text)}
+        onChangeText={(val) => setData(val)}
+        onSubmitEditing={(val) => handleChange(id, val.nativeEvent.text)}
       />
     </View>
   );
