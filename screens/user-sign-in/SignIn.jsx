@@ -1,5 +1,12 @@
 import { useContext, useState } from "react";
-import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import {
+  Alert,
+  Pressable,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
 
 import {
   signInUserWithEmailAndPassword,
@@ -14,9 +21,30 @@ const SignIn = ({ navigation }) => {
 
   const { currentUser } = useContext(AuthContext);
 
+  const handleErrorAlert = (errorCode) => {
+    Alert.alert(
+      "Error",
+      `${errorCode}`,
+      [
+        {
+          text: "Cancel",
+          onPress: () => Alert.alert("Cancelled"),
+          style: "cancel",
+        },
+      ],
+      {
+        cancelable: true,
+      }
+    );
+  };
+
   const handleSignIn = async () => {
-    const { user } = await signInUserWithEmailAndPassword(email, password);
-    console.log(user);
+    try {
+      const { user } = await signInUserWithEmailAndPassword(email, password);
+      user && navigation.navigate("Welcome");
+    } catch (err) {
+      handleErrorAlert(err.code);
+    }
   };
 
   const handleSignOut = async () => {

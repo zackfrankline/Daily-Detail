@@ -4,31 +4,37 @@ import { FIREBASE_DB } from "../../config/firebaseConfig";
 
 const db=FIREBASE_DB;
 
-const Cards = ({ img, variant, desc }) => {
-  const handlePress = async() =>{
-    try{
-      const docRef = await addDoc(collection(db,"Users"),{
-        var:`${variant}`,
-        user:"xyz",
-      })
-      console.log("Document",docRef.id)
-    }
-    catch(e){
-      console.log("Khatarnak error",e);
-    }
-  }
+//Todo: store user variant selection in database once paid
+//Implement userCarVariantStorage function in firebase utils to store (variant and with user uid)
+//call userCarVariantStorage when user clicks on car-card
+
+//2. Implement shadow for cards and change overall layout of button and have casaroul 
+
+const Card = ({ img, variant, desc }) => {
+  // const handlePress = async() =>{
+  //   try{
+  //     const docRef = await addDoc(collection(db,"Users"),{
+  //       var:`${variant}`,
+  //       user:"xyz",
+  //     })
+  //     console.log("Document",docRef.id)
+  //   }
+  //   catch(e){
+  //     console.log("Khatarnak error",e);
+  //   }
+  // }
   return (
-    <View style={styles.container}>
+    <View elevation={5} style={styles.container}>
       <Image source={img} style={{ height: 150, width: 300 }} />
       {/* <Text>{desc}</Text> */}
-      <Pressable style={styles.button} onPress={handlePress}>
+      <Pressable style={styles.button}>
         <Text style={styles.buttonText}>{variant}</Text>
       </Pressable>
     </View>
   );
 };
 
-export default Cards;
+export default Card;
 
 const styles = StyleSheet.create({
   container: {
@@ -40,7 +46,6 @@ const styles = StyleSheet.create({
     borderRadius:10,
   },
   button: {
-    // backgroundColor: "#4f5b66",
     borderRadius: 10,
     height: 40,
     minWidth: "50%",

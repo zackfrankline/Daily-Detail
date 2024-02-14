@@ -1,18 +1,15 @@
 import { Text, View, StyleSheet, ScrollView } from "react-native";
-import Cards from "./Cards";
-import options from "./cars";
-import useAuth from "../../hooks/AuthContext";
+import Card from "../car-card/car-card.component.jsx.jsx";
+import options from "./cars.js";
 
 const Variant = () => {
-  const {user} = useAuth();
   return (
     <View style={styles.container}>
       <Text style={styles.titleText}>Let's select your Variant</Text>
-      <Text style={styles.titleText}>{user}</Text>
       <ScrollView showsVerticalScrollIndicator={false}>
         {options.map((car) => {
           return (
-            <Cards
+            <Card
               key={car.variant}
               variant={car.variant}
               img={car.uri}
@@ -39,7 +36,7 @@ const styles = StyleSheet.create({
   titleText: {
     fontSize: 20,
     marginTop: 10,
-    marginBottom:10,
+    marginBottom: 10,
     fontWeight: "bold",
     fontFamily: "sans-serif",
   },

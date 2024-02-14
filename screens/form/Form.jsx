@@ -1,81 +1,64 @@
-import { useRef, useState } from "react";
-import { Text, View, StyleSheet, TextInput, Pressable } from "react-native";
+import { useState, useEffect, useContext } from "react";
+import { Text, View, StyleSheet, Pressable } from "react-native";
 import Input from "./Input";
+import { AuthContext } from "../../hooks/AuthContext";
+import { createUserDocFromAuth } from "../../config/fireabse.utils";
 
-//Todo : form Input type Checking
-
-const labels = [
-  {
-    id: "name",
-    name: "Full Name",
-  },
-  {
-    id: "address",
-    name: "Address1",
-  },
-  {
-    id: "address2",
-    name: "Address2",
-  },
-  {
-    id: "phone",
-    name: "Phone",
-  },
-  {
-    id: "vehicle",
-    name: "Vehicle No.",
-  },
-  {
-    id: "pincode",
-    name: "Pincode",
-  },
-  {
-    id: "parking",
-    name: "Parking No.",
-  },
-];
+const userPersonalDetails = {
+  displayName: null,
+  address: null,
+  phone: null,
+  pincode: null,
+};
 
 const Form = ({ navigation }) => {
-  const [userData, setUserData] = useState({
-    name: "",
-    address: "",
-    address2: "",
-    vehicle: "",
-    phone: "",
-    pincode: "",
-    parking: "",
-  });
+  const { storeUserDetail } = useContext(AuthContext);
+  const [userData, setUserData] = useState(userPersonalDetails);
 
-  const handleFormSubmit = () =>{
-    console.log(userData);
-  }
+  
+  const handleTextChange = (id, val) => {
+    setUserData({ ...userData, [id]: val });
+  };
 
-  const handleChange = (id,val) => {
-    setUserData({...userData,[id]:val})
-    console.log(userData[id]);
+  const handleFormSubmit = async () => {
+    console.log("Pressed")
+    try {
+      await storeUserDetail(userData);
+    } catch (e) {
+      console.log("Form request to send UserData Error:" + e);
+    }
   };
 
   return (
     <View style={styles.container}>
       <Text style={styles.formTitle}>Enter Details</Text>
-      {labels.map((label) => (
-        <Input
-          key={label.id}
-          id={label.id}
-          name={label.name}
-          handleChange={handleChange}
-        />
-      ))}
-      {/* <Pressable
-        style={styles.button}
-        onPress={() => navigation.navigate("Variant")}
-      >
-        <Text style={styles.buttonText}>Next</Text>
-      </Pressable> */}
-      <Pressable
-        style={styles.button}
-        onPress={handleFormSubmit}
-      >
+
+      <Input
+        id="displayName"
+        label="Name"
+        inputFields={userData}
+        onChange={handleTextChange}
+      />
+      <Input
+        id="address"
+        label="Address"
+        inputFields={userData}
+        onChange={handleTextChange}
+      />
+      <Input
+        id="pincode"
+        label="Pincode"
+        inputFields={userData}
+        onChange={handleTextChange}
+      />
+      <Input
+        id="phone"
+        label="Phone no."
+        inputFields={userData}
+        onChange={handleTextChange}
+      />
+
+      <Pressable onPress={handleFormSubmit} style={styles.button}>
         <Text style={styles.buttonText}>Next</Text>
       </Pressable>
     </View>

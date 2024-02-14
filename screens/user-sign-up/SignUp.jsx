@@ -12,6 +12,7 @@ const SignUp = ({ navigation }) => {
     if(password===confirmPassword){
       try{
           const {user} = await signUpUserWithEmailAndPassword(email,password);
+          navigation.navigate("Welcome")
       }
       catch(e)
       {

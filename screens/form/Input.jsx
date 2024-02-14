@@ -1,18 +1,17 @@
 import { View, TextInput, StyleSheet } from "react-native";
-import { useState } from "react";
 
-const Input = ({ id, name, handleChange }) => {
-  const [data, setData] = useState("");
+const Input = ({ id, label, inputFields, onChange, onSubmit }) => {
   return (
     <View>
-      <TextInput
-        accessibilityLabel={name}
-        style={styles.textInput}
-        placeholder={name}
-        value={data}
-        onChangeText={(val) => setData(val)}
-        onSubmitEditing={(val) => handleChange(id, val.nativeEvent.text)}
-      />
+        <TextInput
+          accessibilityLabel={label}
+          autoFocus={id==="displayName"}
+          style={styles.textInput}
+          value={inputFields.value}
+          inputMode={id==="phone"||id==="pincode"?"tel":"text"}
+          placeholder={label}
+          onChangeText={(val) => onChange(id, val)}
+        />
     </View>
   );
 };
@@ -24,9 +23,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#f6f6f6",
     color: "#000000",
     borderRadius: 20,
-    height: 40,
-    minWidth: "50%",
+    borderWidth: 1,
+    height: 50,
+    minWidth: "80%",
     paddingLeft: 20,
     marginTop: 20,
+    elevation: 1,
   },
 });

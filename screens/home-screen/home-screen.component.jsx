@@ -4,23 +4,23 @@ const HomeScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.logoContainer}>
-        <Image style={styles.logo} source={require("../assets/Logos/logo.png")} />
+        <Image style={styles.logo} source={require("../../assets/Logos/logo.png")} />
       </View>
       <View style={styles.logInContainer}>
         <Text style={styles.titleText}>Welcome</Text>
         <Pressable
           style={styles.button}
-          onPress={() => navigation.navigate("LogIn")}
+          onPress={() => navigation.navigate("SignIn")}
         >
           <Text style={styles.buttonText}>Log in</Text>
         </Pressable>
         <Pressable
           style={styles.button}
           onPress={() => {
-            navigation.navigate("SignIn");
+            navigation.navigate("SignUp");
           }}
         >
-          <Text style={styles.buttonText}>Sign In</Text>
+          <Text style={styles.buttonText}>Sign Up</Text>
         </Pressable>
       </View>
     </View>
