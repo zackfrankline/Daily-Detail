@@ -1,15 +1,23 @@
+import { useContext } from "react";
 import { Text, Pressable, View, StyleSheet } from "react-native";
+import { AuthContext } from "../../hooks/AuthContext";
 
 const Welcome = ({ navigation }) => {
+  const {userData} = useContext(AuthContext);
+  
+  const checkUserDocComplete = () => {
+    if(userData?.pincode){
+      navigation.navigate("Variant");
+    }
+    else{
+      console.log("Abh bhi kam nhi kiya bhai")
+    }
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.titleText}>Welcome to Daily Detail</Text>
-      <Pressable
-        style={styles.button}
-        onPress={() => {
-          navigation.navigate("Form");
-        }}
-      >
+      <Pressable style={styles.button} onPress={checkUserDocComplete}>
         <Text style={styles.buttonText}>Next</Text>
       </Pressable>
     </View>

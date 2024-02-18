@@ -1,32 +1,39 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useMemo, useState } from "react";
 import {
   createUserDocFromAuth,
+  getUserDocFirestore,
   onAuthStateChangedUser,
 } from "../config/fireabse.utils";
 
 export const AuthContext = createContext({
   currentUser: null,
   setCurrentUser: () => null,
+  userData: null,
+  setUserData: () => null,
 });
 
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
+  const [userData, setUserData] = useState(null);
 
-  
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChangedUser((user) => {
-      setCurrentUser(user);
+    const unsubscribe = onAuthStateChangedUser(async (user) => {
       if (user) {
         console.log("UnSubscribe onAuthStateChange Message:", user.uid);
-        createUserDocFromAuth(user);
+        setCurrentUser(user);
+        const userDocRef = await createUserDocFromAuth(user);
+
+        //check user Data reference exists in firestore
+        const userDoc = await getUserDocFirestore(userDocRef);
+        setUserData(userDoc);
       }
     });
     return unsubscribe;
   }, []);
-  
+
   const storeUserDetail = async (userPersonalDetails) => {
-      setCurrentUser({ ...currentUser, userPersonalDetails });
+    setUserData(userPersonalDetails);
     try {
       await createUserDocFromAuth(currentUser, userPersonalDetails);
     } catch (e) {
@@ -34,7 +41,10 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const value = { currentUser, setCurrentUser, storeUserDetail };
+  const value = useMemo(
+    () => ({ currentUser, userData, setCurrentUser, storeUserDetail }),
+    [currentUser,userData]
+  );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

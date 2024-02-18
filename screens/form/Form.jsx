@@ -1,8 +1,7 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useContext } from "react";
 import { Text, View, StyleSheet, Pressable } from "react-native";
 import Input from "./Input";
 import { AuthContext } from "../../hooks/AuthContext";
-import { createUserDocFromAuth } from "../../config/fireabse.utils";
 
 const userPersonalDetails = {
   displayName: null,
@@ -15,13 +14,12 @@ const Form = ({ navigation }) => {
   const { storeUserDetail } = useContext(AuthContext);
   const [userData, setUserData] = useState(userPersonalDetails);
 
-  
   const handleTextChange = (id, val) => {
     setUserData({ ...userData, [id]: val });
   };
 
   const handleFormSubmit = async () => {
-    console.log("Pressed")
+    console.log("Pressed");
     try {
       await storeUserDetail(userData);
     } catch (e) {

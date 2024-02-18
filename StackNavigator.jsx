@@ -11,10 +11,9 @@ import { useContext } from "react";
 const Stack = createNativeStackNavigator();
 
 const StackNavigator = () => {
-
-  const {currentUser} = useContext(AuthContext);
+  const { currentUser } = useContext(AuthContext);
   return (
-    <Stack.Navigator initialRouteName={currentUser?"Welcome":"SignIn"}>
+    <Stack.Navigator initialRouteName={currentUser ? "Welcome" : "SignIn"}>
       <Stack.Screen
         name="Home"
         component={HomeScreen}

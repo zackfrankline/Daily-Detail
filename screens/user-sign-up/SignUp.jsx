@@ -11,7 +11,7 @@ const SignUp = ({ navigation }) => {
   const handleSignUp = async() => {
     if(password===confirmPassword){
       try{
-          const {user} = await signUpUserWithEmailAndPassword(email,password);
+          await signUpUserWithEmailAndPassword(email,password);
           navigation.navigate("Welcome")
       }
       catch(e)
