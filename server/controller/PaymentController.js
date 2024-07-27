@@ -15,14 +15,16 @@ exports.PaymentController = {
         return writeResult;
       } else {
         console.log("document data:", userDoc.data());
+        const endDate = new Date();
+        endDate.setMonth(endDate.getMonth() + 1);
         const writeResult = await userDocRef.set(
           {
             active_subscription: true,
             subscription_start_date: new Date(),
+            subscription_end_date: endDate,
           },
           { merge: true }
         );
-        
       }
     } catch (error) {
       console.log("Payment Controller Error:", error);
