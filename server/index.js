@@ -17,19 +17,20 @@ const { onRequest } = require("firebase-functions/v2/https");
 const { initializeApp } = require("firebase-admin/app");
 const { getFirestore } = require("firebase-admin/firestore");
 
+require("dotenv").config();
+
 const firebaseConfig = {
-  apiKey: "AIzaSyCrOb_Mv96B5V9Ed15K6VgudNccwQVA3wM",
-  authDomain: "carwash-60ef0.firebaseapp.com",
-  projectId: "carwash-60ef0",
-  storageBucket: "carwash-60ef0.appspot.com",
-  messagingSenderId: "77299325434",
-  appId: "1:77299325434:web:be14e2cfa74fbe52322c43",
-  measurementId: "G-RNZXNWMBRV",
+  apiKey: process.env.API_KEY,
+  authDomain: process.env.AUTH_DOMAIN,
+  projectId: process.env.PROJECT_ID,
+  storageBucket: process.env.STORAGE_BUCKET,
+  messagingSenderId: process.env.MESSAGING_SENDER_ID,
+  appId: process.env.APP_ID,
+  measurementId: process.env.MEASUREMENT_ID,
 };
 
 initializeApp(firebaseConfig);
 
-require("dotenv").config();
 
 const app = express();
 const db = getFirestore();

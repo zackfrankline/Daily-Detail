@@ -1,4 +1,4 @@
-import { Image, Pressable, StyleSheet, Text, View } from "react-native";
+import { Alert, Image, Pressable, StyleSheet, Text, View } from "react-native";
 import RazorpayCheckout from "react-native-razorpay";
 import axios from "axios";
 import { useContext } from "react";

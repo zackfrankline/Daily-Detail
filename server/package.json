@@ -7,6 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon index.js",
     "serve": "firebase emulators:start --only functions",
+    "start-with-data": "firebase emulators:start --import=firestore-emulator-data --export-on-exit=firestore-emulator-data",
     "shell": "firebase functions:shell",
     "deploy": "firebase deploy --only functions:api",
     "logs": "firebase functions:log"
