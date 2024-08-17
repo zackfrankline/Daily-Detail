@@ -29,7 +29,8 @@
     },
     "plugins": [
       "expo-build-properties",
-      "@react-native-firebase/app"
+      "@react-native-firebase/app",
+      "expo-font"
     ]
   }
 }

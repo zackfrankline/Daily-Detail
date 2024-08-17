@@ -76,7 +76,7 @@ app.get("/check_db", async (res) => {
   
 });
 
-app.post("/orders/paymentVerification", (req, res) => {
+app.post("/orders/paymentVerification", async (req, res) => {
   try {
     const hmac = crypto.createHmac("sha256", process.env.RAZORPAY_SECRET);
     const [checkoutData, userAuth] = req.body;
@@ -90,7 +90,10 @@ app.post("/orders/paymentVerification", (req, res) => {
     );
 
     //Updating user subcription
-    PaymentController.updateUserSubscription(userAuth.uid, db);
+    const userSubscription = await PaymentController.updateUserSubscription(userAuth.uid, db);
+    if(userSubscription){
+      PaymentController.updateWashReservations(userAuth.uid,db)
+    }
   } catch (error) {
     console.log("payment Verification Error(Server-Side):", error.message);
   }

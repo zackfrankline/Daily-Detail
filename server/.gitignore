@@ -10,6 +10,7 @@ firebase-debug.*.log*
 # Firebase cache
 .firebase/
 firebase-export-1722512832906oLSfD0/
+Firebase_database_files/
 
 # Firebase config
 
