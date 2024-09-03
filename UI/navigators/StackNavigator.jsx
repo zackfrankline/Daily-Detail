@@ -8,6 +8,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { AuthContext } from "../hooks/AuthContext";
 import { useContext } from "react";
 import { BottomTabNavigator } from "./BottomTabNavigator";
+import VariantDetails from "../screens/variant-page/variant-details";
 
 const Stack = createNativeStackNavigator();
 
@@ -15,7 +16,7 @@ const StackNavigator = () => {
   const { currentUser } = useContext(AuthContext);
   return (
     // <Stack.Navigator initialRouteName={currentUser ? "Appviewr" : "Home"}>
-    <Stack.Navigator initialRouteName="Home">
+    <Stack.Navigator initialRouteName="Variant-detail">
       <Stack.Screen
         name="Home"
         component={HomeScreen}
@@ -44,6 +45,16 @@ const StackNavigator = () => {
       <Stack.Screen
         name="AppView"
         component={BottomTabNavigator}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Variant"
+        component={Variant}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Variant-detail"
+        component={VariantDetails}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>

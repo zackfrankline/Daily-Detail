@@ -1,24 +1,54 @@
-import { Text, View, StyleSheet, ScrollView, FlatList } from "react-native";
+import {
+  Text,
+  View,
+  StyleSheet,
+  ScrollView,
+  FlatList,
+  Dimensions,
+} from "react-native";
 import Card from "../car-card/car-card.component.jsx.jsx";
-import options from "./cars.js";
+import carVariantData from "./cars.js";
+import { Style } from "../../constants/ComponentStyle.js";
+import { useContext, useState } from "react";
+import ButtonComponent from "../../components/button.jsx";
+import { Colors } from "../../constants/colors.js";
+import { VariantContext } from "../../hooks/VariantContext.js";
 
-const Variant = () => {
+const Variant = ({navigation}) => {
+
+  const {currentSelectedVariant,setCurrentSelectedVariant} = useContext(VariantContext)
+  const [selectedId, setSelectedId] = useState(null);
+
+  const handleVariantSubmit = () =>{
+    setCurrentSelectedVariant(carVariantData.find((variant)=> variant.id === selectedId));
+    navigation.navigate("Variant-detail")
+  }
+
   return (
     <View style={styles.container}>
-      <Text style={styles.titleText}>Let's select your Variant</Text>
-      <FlatList
-        data={options}
-        renderItem={({item}) => 
-          <Card
-            order_id={item.order_id}
-            variant={item.variant}
-            img={item.uri}
-            desc={item.desc}
-          />
-        }
-        keyExtractor={card => card.variant}
-        showsVerticalScrollIndicator={false}
-      />
+      <View>
+        <Text style={[Style.titleText,{fontSize:24,marginBottom:100,marginTop:20}]}>Let's select your Car's body</Text>
+      </View>
+      {/* <View> */}
+        <FlatList
+          data={carVariantData}
+          keyExtractor={(card) => card.variant}
+          showsVerticalScrollIndicator={false}
+          horizontal={false}
+          numColumns={2}
+          renderItem={({ item }) => (
+            <Card
+              selectedId={selectedId}
+              setSelectedId={setSelectedId}
+              id={item.id}
+              variant={item.variant}
+              img={item.uri}
+            />
+          )}
+        />
+      <View>
+        <ButtonComponent text="Continue" color={Colors.primaryColor} onPress={handleVariantSubmit}/>
+      </View>
     </View>
   );
 };
@@ -31,22 +61,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
-    marginBottom: 10,
-  },
-  titleText: {
-    fontSize: 20,
-    marginTop: 10,
-    marginBottom: 10,
-    fontWeight: "bold",
-    fontFamily: "sans-serif",
-  },
-  textInput: {
-    backgroundColor: "#f6f6f6",
-    color: "#000000",
-    borderRadius: 20,
-    height: 40,
-    minWidth: "50%",
-    paddingLeft: 20,
-    marginTop: 20,
-  },
+    marginVertical:20,
+  }, 
 });

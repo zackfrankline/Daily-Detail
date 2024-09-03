@@ -1,28 +1,32 @@
-const options = [
-  {
+const carVariantData = [
+  { 
+    id:"1", 
     order_id: "hatch-back1",
-    variant: "hatchBack",
-    uri: require("../../assets/Cars/hatchBack.jpg"),
+    variant: "Hatchback",
+    uri: require("../../assets/Cars/cars logo/hatchBack.png"),
     desc: "Alto,i20,Polo",
   },
-  {
-    order_id: "compact-suv-1",
-    variant: "Compack SUV",
-    uri: require("../../assets/Cars/compact-suv.jpg"),
-    desc: "Venue,Seltos,Astor,etc",
-  },
-  {
+  { 
+    id:"2",
     order_id: "sedan-1",
     variant: "Sedan",
-    uri: require("../../assets/Cars/sedan.jpg"),
+    uri: require("../../assets/Cars/cars logo/Sedan.png"),
+    desc: "Venue,Seltos,Astor,etc",
+  },
+  { 
+    id:"3",
+    order_id: "compact-suv-1",
+    variant: "Compact SUV",
+    uri: require("../../assets/Cars/cars logo/compactSuv.png"),
     desc: "Honda City,Verna,S-class",
   },
-  {
+  { 
+    id:"4",
     order_id: "suv-1",
     variant: "SUV",
-    uri: require("../../assets/Cars/SUV.jpg"),
+    uri: require("../../assets/Cars/cars logo/suv.png"),
     desc: "Thar,Creta",
   },
 ];
 
-export default options;
+export default carVariantData;

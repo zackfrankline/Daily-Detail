@@ -6,11 +6,12 @@ import { AuthProvider } from "./hooks/AuthContext";
 
 import * as SplashScreen from "expo-splash-screen";
 import { Amaranth_700Bold } from "@expo-google-fonts/amaranth";
-import { Sora_600SemiBold } from '@expo-google-fonts/sora'
+import { Sora_600SemiBold, Sora_700Bold } from "@expo-google-fonts/sora";
 import { SuezOne_400Regular } from "@expo-google-fonts/suez-one";
 import { Satisfy_400Regular } from "@expo-google-fonts/satisfy";
 import { useFonts } from "expo-font";
 import { useEffect } from "react";
+import { VariantProvider } from "./hooks/VariantContext";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -18,6 +19,7 @@ export default function App() {
   const [loaded, error] = useFonts({
     Amaranth_700Bold,
     Sora_600SemiBold,
+    Sora_700Bold,
     SuezOne_400Regular,
     Satisfy_400Regular,
   });
@@ -35,7 +37,9 @@ export default function App() {
   return (
     <NavigationContainer>
       <AuthProvider>
-        <StackNavigator />
+        <VariantProvider>
+          <StackNavigator />
+        </VariantProvider>
       </AuthProvider>
     </NavigationContainer>
   );

@@ -1,13 +1,28 @@
 import { useState, useContext } from "react";
-import { Text, View, StyleSheet, Pressable } from "react-native";
+import {
+  Text,
+  View,
+  StyleSheet,
+  Pressable,
+  ScrollView,
+  ImageBackground,
+  Dimensions,
+  KeyboardAvoidingView,
+  Platform,
+} from "react-native";
 import Input from "./Input";
 import { AuthContext } from "../../hooks/AuthContext";
+import { Style } from "../../constants/ComponentStyle";
+import InputField from "../../components/InputField";
+import ButtonComponent from "../../components/button";
+import { Colors } from "../../constants/colors";
 
 const userPersonalDetails = {
   displayName: null,
   address: null,
   phone: null,
   pincode: null,
+  buildingName: null,
 };
 
 const Form = ({ navigation }) => {
@@ -16,50 +31,105 @@ const Form = ({ navigation }) => {
 
   const handleTextChange = (id, val) => {
     setUserData({ ...userData, [id]: val });
+    console.log(userData);
   };
 
   const handleFormSubmit = async () => {
     console.log("Pressed");
     try {
       await storeUserDetail(userData);
+      navigation.navigate("AppView");
     } catch (e) {
       console.log("Form request to send UserData Error:" + e);
     }
-    navigation.navigate("AppView")
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.formTitle}>Enter Details</Text>
+      <ImageBackground
+        style={styles.backgroundImage}
+        source={require("../../assets/Formbackground.png")}
+        resizeMode="cover"
+      >
+        <ScrollView
+          contentContainerStyle={{
+            alignItems: "center",
+            width: Dimensions.get("window").width,
+            justifyContent: "center",
+          }}
+        >
+          <KeyboardAvoidingView
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+            style={styles.container}
+          >
+            <View style={[Style.logInTextContainer,{marginTop:100}]}>
+              <Text style={Style.titleText}>More About you</Text>
+              <Text style={Style.secondaryText}>Help us with you details</Text>
+            </View>
 
-      <Input
-        id="displayName"
-        label="Name"
-        inputFields={userData}
-        onChange={handleTextChange}
-      />
-      <Input
-        id="address"
-        label="Address"
-        inputFields={userData}
-        onChange={handleTextChange}
-      />
-      <Input
-        id="pincode"
-        label="Pincode"
-        inputFields={userData}
-        onChange={handleTextChange}
-      />
-      <Input
-        id="phone"
-        label="Phone no."
-        inputFields={userData}
-        onChange={handleTextChange}
-      />
+            <View style={[Style.inputContainer, { marginTop:10 }]}>
+              <InputField
+                placeholder="Full Name"
+                value={userData.displayName}
+                inputMode="text"
+                onChange={(val) => handleTextChange("displayName", val)}
+              />
+              <InputField
+                placeholder="Phone number"
+                value={userData.phone}
+                onChange={(val) => handleTextChange("phone", val)}
+              />
+              <InputField
+                placeholder="Pincode"
+                value={userData.pincode}
+                onChange={(val) => handleTextChange("pincode", val)}
+              />
+              <InputField
+                placeholder="Street/plotno/sector"
+                value={userData.address}
+                onChange={(val) => handleTextChange("address", val)}
+              />
+              <InputField
+                placeholder="Building Name"
+                value={userData.buildingName}
+                onChange={(val) => handleTextChange("buildingName", val)}
+              />
+              <Text
+                style={[
+                  Style.secondaryText,
+                  {
+                    color: Colors.accentColor,
+                    marginTop: 5,
+                    marginLeft: 5,
+                    alignSelf: "flex-start",
+                    width:"80%",
+                    fontSize:15
+                  },
+                ]}
+              >
+                Every field is mandatory
+              </Text>
+            </View>
 
-      <Pressable onPress={handleFormSubmit} style={styles.button}>
-        <Text style={styles.buttonText}>Next</Text>
-      </Pressable>
+            <View
+              style={[
+                Style.bottomButtonContainer,
+                {
+                  alignItems: "center",
+                  justifyContent: "center",
+                  marginTop: 0,
+                },
+              ]}
+            >
+              <ButtonComponent
+                text="Continue"
+                color={Colors.buttonColor}
+                onPress={handleFormSubmit}
+              />
+            </View>
+          </KeyboardAvoidingView>
+        </ScrollView>
+      </ImageBackground>
     </View>
   );
 };
@@ -69,9 +139,17 @@ export default Form;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    width:"100%",
     alignItems: "center",
     justifyContent: "center",
+  },
+  backgroundImage: {
+    alignItems: "center",
+    position: "absolute",
+    left: 0,
+    top: 0,
+    width: Dimensions.get("window").width,
+    height: Dimensions.get("window").height,
   },
   formTitle: {
     fontSize: 20,

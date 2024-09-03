@@ -24,7 +24,7 @@ const SignUp = ({ navigation }) => {
     if (password === confirmPassword) {
       try {
         await signUpUserWithEmailAndPassword(email, password);
-        navigation.navigate("Welcome");
+        navigation.navigate("SignUp");
       } catch (e) {
         console.log("CreateUserWithEmailAndPassword Error:", e);
       }

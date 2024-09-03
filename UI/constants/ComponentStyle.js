@@ -20,6 +20,7 @@ export const Style = StyleSheet.create({
   },
   textInput: {
     backgroundColor: "#F7F7F9",
+    alignSelf:"center",
     color: "#000000",
     borderRadius: 14,
     height: 65,
@@ -27,6 +28,8 @@ export const Style = StyleSheet.create({
     paddingLeft: 20,
     marginTop: 15,
     elevation: 8,
+    // borderWidth:1,
+    // borderColor:Colors.titleTextColor,
   },
   buttonText: {
     color: "#ffffff",

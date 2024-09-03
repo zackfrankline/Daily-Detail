@@ -1,3 +1,11 @@
+// To Do: if a user doesnt have active subscription then :
+//         render page to choose variant
+//        else
+        // render AppView(home) with profile and Calendar
+
+
+
+
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Variant from "../screens/car-variant/car-variant.component";
 import { Icon } from "@rneui/base";
