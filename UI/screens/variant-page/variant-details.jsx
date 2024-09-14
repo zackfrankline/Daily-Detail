@@ -7,11 +7,16 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  unstable_batchedUpdates,
   View,
 } from "react-native";
 import { Colors } from "../../constants/colors";
 import InputField from "../../components/InputField";
 import ButtonComponent from "../../components/button";
+import { Style } from "../../constants/ComponentStyle";
+import { useContext, useState } from "react";
+import { AuthContext } from "../../hooks/AuthContext";
+import { VariantContext } from "../../hooks/VariantContext";
 
 const productfeatureCardDetails = [
   {
@@ -41,7 +46,14 @@ const FeatureCard = ({ img, title, desc }) => {
         <Image resizeMode="cover" source={img} />
       </View>
       <View style={styles.featureCardText}>
-        <Text style={{ fontFamily: "Sora_700Bold", color: Colors.backgroundC,fontSize:12,marginBottom:4 }}>
+        <Text
+          style={{
+            fontFamily: "Sora_700Bold",
+            color: Colors.backgroundC,
+            fontSize: 12,
+            marginBottom: 4,
+          }}
+        >
           {title}
         </Text>
         <Text
@@ -49,7 +61,7 @@ const FeatureCard = ({ img, title, desc }) => {
             fontFamily: "Sora_600SemiBold",
             fontSize: 9,
             color: Colors.backgroundC,
-            textAlign:"center",
+            textAlign: "center",
           }}
         >
           {desc}
@@ -59,13 +71,32 @@ const FeatureCard = ({ img, title, desc }) => {
   );
 };
 
-const VariantDetails = () => {
+const VariantDetails = ({ navigation }) => {
+  const [vehicleNo, setVehicleNo] = useState(null);
+  const [parkingNo, setParkingNo] = useState(null);
+
+  const { userData } = useContext(AuthContext);
+  // const { currentSelectedVariant } = useContext(VariantContext);
+  const currentSelectedVariant = {
+    id: "1",
+    order_id: "hatch-back1",
+    variant: "Hatchback",
+    uri: require("../../assets/Cars/cars logo/hatchBack.png"),
+    desc: "Alto,i20,Polo",
+  };
+  const { order_id, variant,uri,desc } = currentSelectedVariant;
+
+  const onBook = () => {
+    console.log(userData);
+    const newProfile = {vechile_no:vehicleNo,parking_no:parkingNo}
+    console.log(newProfile)
+  };
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={styles.container}
       enabled={true}
-      keyboardVerticalOffset={40}
     >
       <ScrollView contentContainerStyle={styles.scrollViewContainer}>
         <View style={styles.variantPic}>
@@ -78,9 +109,9 @@ const VariantDetails = () => {
         <View style={styles.detailCard}>
           <View style={styles.headerContainer}>
             <View style={styles.titleAndDesc}>
-              <Text style={styles.title}>HatchBack</Text>
+              <Text style={styles.title}>{variant}</Text>
               <Text style={styles.desc}>
-                Wagon R, i10, i20, alto and many more
+                {desc}
               </Text>
             </View>
             <View style={styles.priceContainer}>
@@ -110,10 +141,38 @@ const VariantDetails = () => {
               )}
             />
           </View>
-          <View>
-            <InputField placeholder="Vehicle Number" />
-            <InputField placeholder="Parking Number" />
-            <ButtonComponent text="Book Now" color={Colors.primaryColor} />
+          <View style={{ marginVertical: 15 }}>
+            <InputField
+              placeholder="Vehicle Number"
+              value={vehicleNo}
+              onChange={(val) => {
+                setVehicleNo(val);
+              }}
+            />
+
+            <InputField
+              placeholder="Parking Number"
+              value={parkingNo}
+              onChange={(val) => {
+                setParkingNo(val);
+              }}
+            />
+            <View style={{ marginVertical: 20 }}>
+              {!(vehicleNo && parkingNo) ? (
+                <ButtonComponent
+                  onPress={onBook}
+                  text="Book Now"
+                  color={Colors.paraTextColor}
+                  disabled={true}
+                />
+              ) : (
+                <ButtonComponent
+                  onPress={onBook}
+                  text="Book Now"
+                  color={Colors.primaryColor}
+                />
+              )}
+            </View>
           </View>
         </View>
       </ScrollView>
@@ -128,15 +187,15 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   detailCard: {
-    flex:5,
+    flex: 5,
     alignItems: "center",
-    backgroundColor:Colors.backgroundC,
-    width:Dimensions.get("screen").width,
-    borderTopLeftRadius:30,
-    borderTopRightRadius:30,
+    backgroundColor: Colors.backgroundC,
+    width: Dimensions.get("screen").width,
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
   },
-  variantPic:{
-    maxHeight:250,
+  variantPic: {
+    maxHeight: 250,
   },
   headerContainer: {
     marginVertical: 20,
@@ -181,13 +240,13 @@ const styles = StyleSheet.create({
   featureCardPic: {
     flex: 1,
     width: "80%",
-    marginVertical:8,
+    marginVertical: 8,
     alignItems: "center",
     justifyContent: "center",
   },
   featureCardText: {
     flex: 2,
-    alignItems:"center"
+    alignItems: "center",
   },
 });
 

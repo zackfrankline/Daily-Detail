@@ -14,9 +14,10 @@ import ButtonComponent from "../../components/button.jsx";
 import { Colors } from "../../constants/colors.js";
 import { VariantContext } from "../../hooks/VariantContext.js";
 
+
 const Variant = ({navigation}) => {
 
-  const {currentSelectedVariant,setCurrentSelectedVariant} = useContext(VariantContext)
+  const {setCurrentSelectedVariant} = useContext(VariantContext)
   const [selectedId, setSelectedId] = useState(null);
 
   const handleVariantSubmit = () =>{

@@ -15,8 +15,8 @@ const Stack = createNativeStackNavigator();
 const StackNavigator = () => {
   const { currentUser } = useContext(AuthContext);
   return (
-    // <Stack.Navigator initialRouteName={currentUser ? "Appviewr" : "Home"}>
-    <Stack.Navigator initialRouteName="Variant-detail">
+    // <Stack.Navigator initialRouteName={currentUser ? "Variant-detail" : "Home"}>
+     <Stack.Navigator initialRouteName="AppView"> 
       <Stack.Screen
         name="Home"
         component={HomeScreen}

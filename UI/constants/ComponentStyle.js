@@ -26,7 +26,6 @@ export const Style = StyleSheet.create({
     height: 65,
     width: 323,
     paddingLeft: 20,
-    marginTop: 15,
     elevation: 8,
     // borderWidth:1,
     // borderColor:Colors.titleTextColor,

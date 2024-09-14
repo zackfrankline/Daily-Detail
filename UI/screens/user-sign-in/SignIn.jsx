@@ -3,6 +3,8 @@ import {
   Alert,
   Dimensions,
   ImageBackground,
+  KeyboardAvoidingView,
+  Platform,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -59,14 +61,17 @@ const SignIn = ({ navigation }) => {
   };
 
   return (
-    <View style={[styles.container]}>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={styles.container}
+      enabled={true}
+    >
       <ScrollView contentContainerStyle={styles.scrollViewContainer}>
         <ImageBackground
           source={require("../../assets/LogInbackground.png")}
           resizeMode="cover"
           style={[styles.backgroundImage]}
         >
-          {/* <View style={styles.container}> */}
           {currentUser ? (
             <>
               <Text>You're Logged In</Text>
@@ -74,6 +79,12 @@ const SignIn = ({ navigation }) => {
               <Pressable style={styles.button} onPress={handleSignOut}>
                 <Text style={styles.buttonText}>Sign Out</Text>
               </Pressable>
+              <ButtonComponent
+                text="Variant"
+                onPress={()=>{navigation.navigate("Variant-detail")}}
+                color={Colors.buttonColor}
+                disabled={false}
+              />
             </>
           ) : (
             <>
@@ -117,11 +128,21 @@ const SignIn = ({ navigation }) => {
               </View>
 
               <View style={Style.bottomButtonContainer}>
-                <ButtonComponent
-                  text="Log In"
-                  onPress={handleSignIn}
-                  color={Colors.buttonColor}
-                />
+                {!(email && password) ? (
+                  <ButtonComponent
+                    text="Log In"
+                    onPress={handleSignIn}
+                    color={Colors.paraTextColor}
+                    disabled={true}
+                  />
+                ) : (
+                  <ButtonComponent
+                    text="Log In"
+                    onPress={handleSignIn}
+                    color={Colors.buttonColor}
+                    disabled={false}
+                  />
+                )}
                 <Text
                   style={[
                     Style.secondaryText,
@@ -144,10 +165,9 @@ const SignIn = ({ navigation }) => {
               </View>
             </>
           )}
-          {/* </View> */}
         </ImageBackground>
       </ScrollView>
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -157,13 +177,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  scrollViewContainer: {
-    flex: 1,
-    height: "1vh",
-  },
   backgroundImage: {
     alignItems: "center",
-    position: "absolute",
     left: 0,
     top: 0,
     width: Dimensions.get("window").width,

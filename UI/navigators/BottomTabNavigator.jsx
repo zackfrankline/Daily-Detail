@@ -10,6 +10,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Variant from "../screens/car-variant/car-variant.component";
 import { Icon } from "@rneui/base";
 import { Calendar } from "../screens/calendar-container/calendar-container.component";
+import { ProfileCalendarScreen } from "../screens/profile-calendar/profile-calendar.screen";
 
 const Tab = createBottomTabNavigator();
 
@@ -17,8 +18,8 @@ export const BottomTabNavigator = () => {
   return (
     <Tab.Navigator>
       <Tab.Screen
-        name="Variant"
-        component={Variant}
+        name="Home"
+        component={ProfileCalendarScreen}
         options={{
           headerShown: true,
           tabBarIcon: ({ color, size }) => (
