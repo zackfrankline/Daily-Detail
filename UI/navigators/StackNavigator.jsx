@@ -3,19 +3,20 @@ import SignUp from "../screens/user-sign-up/SignUp";
 import SignIn from "../screens/user-sign-in/SignIn";
 import Welcome from "../screens/welcome-screen/welcome-screen.component";
 import Form from "../screens/form/Form";
-import Variant from "../screens/car-variant/car-variant.component";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { AuthContext } from "../hooks/AuthContext";
 import { useContext } from "react";
 import { BottomTabNavigator } from "./BottomTabNavigator";
+import VariantDetails from "../screens/variant-page/variant-details";
+import Variant from "../screens/variant-selection-screen/variant-selection.component";
 
 const Stack = createNativeStackNavigator();
 
 const StackNavigator = () => {
   const { currentUser } = useContext(AuthContext);
   return (
-    // <Stack.Navigator initialRouteName={currentUser ? "Welcome" : "Home"}>
-    <Stack.Navigator initialRouteName={currentUser ? "AppView" : "Home"}>
+    // <Stack.Navigator initialRouteName={currentUser ? "Variant-detail" : "Home"}>
+     <Stack.Navigator initialRouteName="AppView"> 
       <Stack.Screen
         name="Home"
         component={HomeScreen}
@@ -44,6 +45,16 @@ const StackNavigator = () => {
       <Stack.Screen
         name="AppView"
         component={BottomTabNavigator}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Variant"
+        component={Variant}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Variant-detail"
+        component={VariantDetails}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>

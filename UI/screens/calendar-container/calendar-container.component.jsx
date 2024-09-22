@@ -1,6 +1,6 @@
 import { Text, View } from "react-native"
 
-export const Calendar = () => {
+export const UserSettings = () => {
     return (
         <View>
             <Text>This is Calendar</Text>

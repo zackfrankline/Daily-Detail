@@ -1,22 +1,75 @@
 import { useContext } from "react";
-import { Text, Pressable, View, StyleSheet } from "react-native";
+import {
+  Text,
+  Pressable,
+  View,
+  StyleSheet,
+  FlatList,
+  Dimensions,
+  Button,
+} from "react-native";
 import { AuthContext } from "../../hooks/AuthContext";
+import { carouselData } from "../../constants/carouselData";
+import OnboardingItem from "../../components/OnboardingItem";
+import Animated, {
+  useAnimatedRef,
+  useSharedValue,
+} from "react-native-reanimated";
+import CustomButton from "../../components/CustomButton";
 
 const Welcome = ({ navigation }) => {
-  const {userData} = useContext(AuthContext);
-  
+  const { userData } = useContext(AuthContext);
+  const flatListRef = useAnimatedRef();
+  const flatListIndex = useSharedValue(0);
+  const x = useSharedValue(0);
+
   const checkUserDocComplete = () => {
-    console.log(userData)
-    userData?.pincode?
-      navigation.navigate("AppView"): navigation.navigate("Form");
+    console.log(userData);
+    return ("pincode" in userData);
+  };
+
+  const onViewableItemsChanged = ({ viewableItems }) => {
+    if (viewableItems[0].index !== null) {
+      flatListIndex.value = viewableItems[0].index;
+    }
+  };
+
+  const handleNavigation = () => {
+    if (checkUserDocComplete()) {
+      navigation.navigate("AppView");
+    } else {
+      navigation.navigate("Form");
+    }
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.titleText}>Welcome to Daily Detail</Text>
-      <Pressable style={styles.button} onPress={checkUserDocComplete}>
-        <Text style={styles.buttonText}>Next</Text>
-      </Pressable>
+      <Animated.FlatList
+        ref={flatListRef}
+        data={carouselData}
+        style={styles.flatlist}
+        keyExtractor={(item) => item.id}
+        horizontal
+        bounces={false}
+        pagingEnabled={true}
+        onViewableItemsChanged={onViewableItemsChanged}
+        viewabilityConfig={{
+          minimumViewTime: 300,
+          viewAreaCoveragePercentThreshold: 10,
+        }}
+        renderItem={({ item }) => (
+          <OnboardingItem img={item.img} title={item.title} desc={item.desc} />
+        )}
+      />
+      <View style={styles.nextButton}>
+        <CustomButton
+          navigate={handleNavigation}
+          flatListRef={flatListRef}
+          flatListIndex={flatListIndex}
+          dataLength={carouselData.length}
+          x={x}
+        />
+      </View>
     </View>
   );
 };
@@ -29,8 +82,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "space-evenly",
-    paddingBottom: 25,
-    paddingTop: 25,
+  },
+  flatlist: {
+    height: Dimensions.get("window").height,
   },
   titleText: {
     fontSize: 20,
@@ -38,17 +92,9 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontFamily: "sans-serif",
   },
-  button: {
-    marginTop: 25,
-    backgroundColor: "#4f5b66",
-    borderRadius: 10,
-    height: 40,
-    minWidth: "50%",
-    alignItems: "center",
-    padding: 10,
-  },
-  buttonText: {
-    color: "#fff",
-    letterSpacing: 1,
+  nextButton: {
+    position: "absolute",
+    bottom: 30,
+    right: 30,
   },
 });

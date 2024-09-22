@@ -1,55 +1,82 @@
-import { StyleSheet, Text, View, Pressable ,Image } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  ImageBackground,
+} from "react-native";
+import ButtonComponent from "../../components/button";
+import { Colors } from "../../constants/colors";
 
 const HomeScreen = ({ navigation }) => {
   return (
-    <View style={styles.container}>
+    // <View style={styles.container}>
+    <ImageBackground
+      source={require("../../assets/Logos/DD Logo.png")}
+      resizeMode="cover"
+      style={styles.container}
+    >
       <View style={styles.logoContainer}>
-        <Image style={styles.logo} source={require("../../assets/Logos/logo.png")} />
+        <Image
+          style={styles.logo}
+          source={require("../../assets/Logos/WelcomeLogo.png")}
+        />
       </View>
+
+      <View style={styles.titleContainer}>
+        <Text style={styles.titleText}>Welcome to Daily Detailed</Text>
+        <Text style={styles.subText}>Your car's bestfriend</Text>
+      </View>
+
       <View style={styles.logInContainer}>
-        <Text style={styles.titleText}>Welcome</Text>
-        <Pressable
-          style={styles.button}
+        <ButtonComponent
+          text="Log In"
           onPress={() => navigation.navigate("SignIn")}
-        >
-          <Text style={styles.buttonText}>Log in</Text>
-        </Pressable>
-        <Pressable
-          style={styles.button}
+          color={Colors.buttonColor}
+        />
+         
+
+        <ButtonComponent
+          text="Sign Up"
           onPress={() => {
             navigation.navigate("SignUp");
           }}
-        >
-          <Text style={styles.buttonText}>Sign Up</Text>
-        </Pressable>
+          color={Colors.accentColor}
+        />
       </View>
-    </View>
+    </ImageBackground>
+    // </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex:1,
+    flex: 1,
     backgroundColor: "#fff",
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "space-around",
   },
   logoContainer: {
-    paddingTop:10,
+    position: "relative",
+    elevation: 4,
   },
   logo: {
+    // position:"absolute",
     resizeMode: "contain",
-    height: 100,
-    width: 130,
-    paddingBottom:20,
+  },
+  titleContainer: {
+    alignItems: "center",
   },
   titleText: {
-    textAlign:"center",
-    fontSize: 35,
-    marginTop: 10,
-    fontWeight: "bold",
-    fontFamily: "sans-serif",
-    marginBottom: 20,
+    textAlign: "center",
+    fontSize: 24,
+    fontFamily: "Amaranth_700Bold",
+    marginBottom: 10,
+  },
+  subText: {
+    fontFamily: "Satisfy_400Regular",
+    fontSize: 18,
+    letterSpacing: 2,
   },
   button: {
     alignItems: "center",
@@ -57,17 +84,16 @@ const styles = StyleSheet.create({
     backgroundColor: "#000000",
     padding: 10,
     minWidth: 100,
-    width: 150,
+    width: 323,
+    height: 65,
     margin: 10,
     textAlign: "center",
-    borderRadius: 10,
+    borderRadius: 14,
   },
   buttonText: {
     color: "#ffffff",
     fontSize: 16,
-    lineHeight: 21,
-    fontWeight: "bold",
-    letterSpacing: 0.25,
+    fontFamily: "Sora_600SemiBold",
   },
 });
 

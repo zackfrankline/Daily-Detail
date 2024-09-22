@@ -1,7 +1,12 @@
 import { useContext, useState } from "react";
 import {
   Alert,
+  Dimensions,
+  ImageBackground,
+  KeyboardAvoidingView,
+  Platform,
   Pressable,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -14,6 +19,10 @@ import {
 } from "../../config/fireabse.utils";
 
 import { AuthContext } from "../../hooks/AuthContext";
+import { Style } from "../../constants/ComponentStyle";
+import InputField from "../../components/InputField";
+import ButtonComponent from "../../components/button";
+import { Colors } from "../../constants/colors";
 
 const SignIn = ({ navigation }) => {
   const [email, setEmail] = useState("");
@@ -52,51 +61,98 @@ const SignIn = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
-      {currentUser ? (
-        <>
-          <Text>You're Logged In</Text>
-          {/* signOut Button */}
-          <Pressable style={styles.button} onPress={handleSignOut}>
-            <Text style={styles.buttonText}>Sign Out</Text>
-          </Pressable>
-        </>
-      ) : (
-        <>
-          <Text style={{ fontSize: 20, letterSpacing: 1 }}>
-            Enter Credential
-          </Text>
-          <TextInput
-            style={styles.textInput}
-            placeholder="Email"
-            value={email}
-            onChangeText={(val) => {
-              setEmail(val);
-            }}
-          />
-          <TextInput
-            style={styles.textInput}
-            placeholder="password"
-            value={password}
-            onChangeText={(val) => {
-              setPassword(val);
-            }}
-            secureTextEntry={true}
-          />
-          <Pressable style={styles.button} onPress={handleSignIn}>
-            <Text style={styles.buttonText}>Log In</Text>
-          </Pressable>
-          <Pressable
-            style={styles.SignUpButton}
-            onPress={() => {
-              navigation.navigate("SignUp");
-            }}
-          >
-            <Text style={styles.SignUp}>Don't have an Account? Sign Up</Text>
-          </Pressable>
-        </>
-      )}
-    </View>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={styles.container}
+      enabled={true}
+    >
+      <ScrollView contentContainerStyle={styles.scrollViewContainer}>
+        <ImageBackground
+          source={require("../../assets/LogInbackground.png")}
+          resizeMode="cover"
+          style={[styles.backgroundImage]}
+        >
+          
+            <>
+              <View style={Style.logInTextContainer}>
+                <Text style={Style.titleText}>Log In</Text>
+                <Text style={Style.secondaryText}>
+                  Please Sign In to continue
+                </Text>
+              </View>
+
+              <View style={Style.inputContainer}>
+                <InputField
+                  placeholder="Email"
+                  value={email}
+                  onChange={(val) => {
+                    setEmail(val);
+                  }}
+                />
+                <InputField
+                  placeholder="password"
+                  value={password}
+                  onChange={(val) => {
+                    setPassword(val);
+                  }}
+                  secureTextEntry={true}
+                />
+                <Pressable style={{ alignSelf: "flex-end" }}>
+                  <Text
+                    style={[
+                      Style.secondaryText,
+                      {
+                        color: "#F7F7F9",
+                        fontSize: 16,
+                        marginTop: 5,
+                      },
+                    ]}
+                  >
+                    Forget Password?
+                  </Text>
+                </Pressable>
+              </View>
+
+              <View style={Style.bottomButtonContainer}>
+                {!(email && password) ? (
+                  <ButtonComponent
+                    text="Log In"
+                    onPress={handleSignIn}
+                    color={Colors.paraTextColor}
+                    disabled={true}
+                  />
+                ) : (
+                  <ButtonComponent
+                    text="Log In"
+                    onPress={handleSignIn}
+                    color={Colors.buttonColor}
+                    disabled={false}
+                  />
+                )}
+                <Text
+                  style={[
+                    Style.secondaryText,
+                    {
+                      color: "#3c3c3c",
+                    },
+                  ]}
+                >
+                  Don't have an account?
+                </Text>
+                <Pressable
+                  onPress={() => {
+                    navigation.navigate("SignUp");
+                  }}
+                >
+                  <Text style={[Style.secondaryText, { color: "#F1916D" }]}>
+                    Sign Up
+                  </Text>
+                </Pressable>
+              </View>
+            </>
+        </ImageBackground>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -105,36 +161,12 @@ export default SignIn;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+  },
+  backgroundImage: {
     alignItems: "center",
-    justifyContent: "center",
-  },
-  textInput: {
-    backgroundColor: "#f6f6f6",
-    color: "#000000",
-    borderRadius: 20,
-    height: 40,
-    minWidth: "50%",
-    paddingLeft: 20,
-    marginTop: 20,
-  },
-  button: {
-    marginTop: 25,
-    backgroundColor: "#4f5b66",
-    borderRadius: 10,
-    height: 40,
-    minWidth: "50%",
-    alignItems: "center",
-    padding: 10,
-  },
-  SignUpButton: {
-    marginTop: 7,
-  },
-  SignUp: {
-    color: "#00a6fb",
-  },
-  buttonText: {
-    color: "#fff",
-    letterSpacing: 1,
+    left: 0,
+    top: 0,
+    width: Dimensions.get("window").width,
+    height: Dimensions.get("window").height,
   },
 });

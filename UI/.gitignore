@@ -36,3 +36,6 @@ yarn-error.*
 
 #FireBase Config
 firebaseConfig.js
+
+#FireBase Database Files
+Firebase_database_files/
