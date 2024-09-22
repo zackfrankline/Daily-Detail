@@ -17,33 +17,15 @@ import { Style } from "../../constants/ComponentStyle";
 import { useContext, useState } from "react";
 import { AuthContext } from "../../hooks/AuthContext";
 import { VariantContext } from "../../hooks/VariantContext";
+import { productfeatureCardDetails } from "./productFeatures";
+import { IMAGES } from "../../assets";
 
-const productfeatureCardDetails = [
-  {
-    id: 1,
-    title: "Rinse",
-    desc: "A rinse of water with pressure to remove hard struck mud and dirt to prevent scratches on paint surface.",
-    img: require("../../assets/Logos/Variant Details/rinse.png"),
-  },
-  {
-    id: 2,
-    title: "Window Wipes",
-    desc: "Wipe off windows with wiper provide a clear view but avoid the chances of water marks.",
-    img: require("../../assets/Logos/Variant Details/ww.png"),
-  },
-  {
-    id: 3,
-    title: "Drying",
-    desc: "A two step drying process once with a damp microfiber and then with a drying towel effectively cleans the surface without damaging paint",
-    img: require("../../assets/Logos/Variant Details/dry.png"),
-  },
-];
 
 const FeatureCard = ({ img, title, desc }) => {
   return (
     <View style={styles.cardContainer}>
       <View style={styles.featureCardPic}>
-        <Image resizeMode="cover" source={img} />
+        <Image resizeMode="cover" source={IMAGES[title]} />
       </View>
       <View style={styles.featureCardText}>
         <Text
@@ -76,17 +58,11 @@ const VariantDetails = ({ navigation }) => {
   const [parkingNo, setParkingNo] = useState(null);
 
   const { userData } = useContext(AuthContext);
-  // const { currentSelectedVariant } = useContext(VariantContext);
-  const currentSelectedVariant = {
-    id: "1",
-    order_id: "hatch-back1",
-    variant: "Hatchback",
-    uri: require("../../assets/Cars/cars logo/hatchBack.png"),
-    desc: "Alto,i20,Polo",
-  };
-  const { order_id, variant,uri,desc } = currentSelectedVariant;
+  const { currentSelectedVariant } = useContext(VariantContext);
 
-  const onBook = () => {
+  const { order_id, title,uri,desc , productFeatureDetail } = currentSelectedVariant;
+
+  const handleBookNow = () => {
     console.log(userData);
     const newProfile = {vechile_no:vehicleNo,parking_no:parkingNo}
     console.log(newProfile)
@@ -109,7 +85,7 @@ const VariantDetails = ({ navigation }) => {
         <View style={styles.detailCard}>
           <View style={styles.headerContainer}>
             <View style={styles.titleAndDesc}>
-              <Text style={styles.title}>{variant}</Text>
+              <Text style={styles.title}>{title}</Text>
               <Text style={styles.desc}>
                 {desc}
               </Text>
@@ -129,7 +105,7 @@ const VariantDetails = ({ navigation }) => {
           <View style={styles.flatlistContainer}>
             <FlatList
               contentContainerStyle={styles.flatlist}
-              data={productfeatureCardDetails}
+              data={productFeatureDetail}
               keyExtractor={(item) => item.id}
               horizontal={true}
               renderItem={({ item }) => (
@@ -160,14 +136,14 @@ const VariantDetails = ({ navigation }) => {
             <View style={{ marginVertical: 20 }}>
               {!(vehicleNo && parkingNo) ? (
                 <ButtonComponent
-                  onPress={onBook}
+                  onPress={handleBookNow}
                   text="Book Now"
                   color={Colors.paraTextColor}
                   disabled={true}
                 />
               ) : (
                 <ButtonComponent
-                  onPress={onBook}
+                  onPress={handleBookNow}
                   text="Book Now"
                   color={Colors.primaryColor}
                 />

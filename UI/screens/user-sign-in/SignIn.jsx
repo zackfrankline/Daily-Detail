@@ -72,21 +72,7 @@ const SignIn = ({ navigation }) => {
           resizeMode="cover"
           style={[styles.backgroundImage]}
         >
-          {currentUser ? (
-            <>
-              <Text>You're Logged In</Text>
-              {/* signOut Button */}
-              <Pressable style={styles.button} onPress={handleSignOut}>
-                <Text style={styles.buttonText}>Sign Out</Text>
-              </Pressable>
-              <ButtonComponent
-                text="Variant"
-                onPress={()=>{navigation.navigate("Variant-detail")}}
-                color={Colors.buttonColor}
-                disabled={false}
-              />
-            </>
-          ) : (
+          
             <>
               <View style={Style.logInTextContainer}>
                 <Text style={Style.titleText}>Log In</Text>
@@ -164,7 +150,6 @@ const SignIn = ({ navigation }) => {
                 </Pressable>
               </View>
             </>
-          )}
         </ImageBackground>
       </ScrollView>
     </KeyboardAvoidingView>

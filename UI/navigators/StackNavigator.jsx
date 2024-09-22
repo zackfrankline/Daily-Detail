@@ -3,12 +3,12 @@ import SignUp from "../screens/user-sign-up/SignUp";
 import SignIn from "../screens/user-sign-in/SignIn";
 import Welcome from "../screens/welcome-screen/welcome-screen.component";
 import Form from "../screens/form/Form";
-import Variant from "../screens/car-variant/car-variant.component";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { AuthContext } from "../hooks/AuthContext";
 import { useContext } from "react";
 import { BottomTabNavigator } from "./BottomTabNavigator";
 import VariantDetails from "../screens/variant-page/variant-details";
+import Variant from "../screens/variant-selection-screen/variant-selection.component";
 
 const Stack = createNativeStackNavigator();
 

@@ -2,27 +2,33 @@ import {
   Text,
   View,
   StyleSheet,
-  ScrollView,
   FlatList,
-  Dimensions,
 } from "react-native";
 import Card from "../car-card/car-card.component.jsx.jsx";
-import carVariantData from "./cars.js";
 import { Style } from "../../constants/ComponentStyle.js";
 import { useContext, useState } from "react";
 import ButtonComponent from "../../components/button.jsx";
 import { Colors } from "../../constants/colors.js";
 import { VariantContext } from "../../hooks/VariantContext.js";
+import { ProductContext } from "../../hooks/ProductContext.jsx";
 
 
 const Variant = ({navigation}) => {
 
-  const {setCurrentSelectedVariant} = useContext(VariantContext)
+  const {currentSelectedVariant, setCurrentSelectedVariant} = useContext(VariantContext)
+  const {products} = useContext(ProductContext);
   const [selectedId, setSelectedId] = useState(null);
 
   const handleVariantSubmit = () =>{
-    setCurrentSelectedVariant(carVariantData.find((variant)=> variant.id === selectedId));
-    navigation.navigate("Variant-detail")
+    if(selectedId){
+      setCurrentSelectedVariant(products.find((variant)=> variant.id === selectedId));
+      console.log(currentSelectedVariant)
+      navigation.navigate("Variant-detail")
+
+    }
+    else{
+      alert("select a Variant");
+    }
   }
 
   return (
@@ -32,8 +38,8 @@ const Variant = ({navigation}) => {
       </View>
       {/* <View> */}
         <FlatList
-          data={carVariantData}
-          keyExtractor={(card) => card.variant}
+          data={products}
+          keyExtractor={(card) => card.title}
           showsVerticalScrollIndicator={false}
           horizontal={false}
           numColumns={2}
@@ -42,8 +48,8 @@ const Variant = ({navigation}) => {
               selectedId={selectedId}
               setSelectedId={setSelectedId}
               id={item.id}
-              variant={item.variant}
-              img={item.uri}
+              variant={item.title}
+              img={item.imageUri}
             />
           )}
         />

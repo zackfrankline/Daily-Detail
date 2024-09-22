@@ -10,8 +10,9 @@ import { Colors } from "../../constants/colors";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { Calendar, CalendarList, Agenda } from "react-native-calendars";
 import { useEffect, useState } from "react";
+import { Style } from "../../constants/ComponentStyle";
 
-const profiledata = [
+const subscribedProfiledata = [
   {
     payment_reference: 1,
     orderID: 1234,
@@ -67,12 +68,12 @@ const ProfileCard = ({ title, days, index, orderId, handlePress }) => {
         </View>
       </Pressable>
     </View>
-    </View>
+    
   );
 };
 
-export const ProfileCalendarScreen = () => {
-  const [selectedProfile, setSelectedProfile] = useState(profiledata[0]);
+export const ProfileCalendarScreen = ({navigation}) => {
+  const [selectedProfile, setSelectedProfile] = useState(subscribedProfiledata[0]);
   const [markedDates, setMarkedDates] = useState(null);
 
   useEffect(() => {
@@ -107,14 +108,20 @@ export const ProfileCalendarScreen = () => {
   const { Width, Height } = Dimensions.get("window");
 
   const handleProfileSelection = (orderID) => {
-    setSelectedProfile(profiledata.find((item) => item.orderID === orderID));
+    setSelectedProfile(subscribedProfiledata.find((item) => item.orderID === orderID));
     // console.log(selectedProfile)
   };
 
+  const handleProfileAdd = () =>{
+    navigation.navigate("Variant");
+  }
+
   return (
     <View style={styles.container}>
+    <Text style={[Style.secondaryText,{fontSize:16,marginHorizontal:20,marginVertical:20}]}>Your Subscribed Profiles</Text>
       <View style={[styles.profileFlatListContainer, { flexDirection: "row" }]}>
-        <View
+        <Pressable
+          onPress={handleProfileAdd}
           style={{
             width: 100,
             height: 100,
@@ -127,11 +134,12 @@ export const ProfileCalendarScreen = () => {
           }}
         >
           <AntDesign name="pluscircle" size={32} color="black" />
-        </View>
+        </Pressable>
         <FlatList
-          data={profiledata}
+          data={subscribedProfiledata}
           keyExtractor={(item) => item.payment_reference}
           horizontal
+          showsHorizontalScrollIndicator={false}
           renderItem={({ item, index }) => {
             return (
               <ProfileCard
@@ -160,5 +168,11 @@ export const ProfileCalendarScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "white",
   },
+  profileFlatListContainer:{
+    marginLeft:10,
+    marginBottom:20,
+    // marginVertical:10,
+  }
 });

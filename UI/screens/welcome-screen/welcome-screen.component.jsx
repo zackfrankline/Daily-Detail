@@ -1,27 +1,33 @@
 import { useContext } from "react";
-import { Text, Pressable, View, StyleSheet, FlatList, Dimensions, Button } from "react-native";
+import {
+  Text,
+  Pressable,
+  View,
+  StyleSheet,
+  FlatList,
+  Dimensions,
+  Button,
+} from "react-native";
 import { AuthContext } from "../../hooks/AuthContext";
 import { carouselData } from "../../constants/carouselData";
 import OnboardingItem from "../../components/OnboardingItem";
-import Animated, { useAnimatedRef, useSharedValue } from "react-native-reanimated";
+import Animated, {
+  useAnimatedRef,
+  useSharedValue,
+} from "react-native-reanimated";
 import CustomButton from "../../components/CustomButton";
-
-
 
 const Welcome = ({ navigation }) => {
   const { userData } = useContext(AuthContext);
   const flatListRef = useAnimatedRef();
-  const flatListIndex = useSharedValue(0)
+  const flatListIndex = useSharedValue(0);
   const x = useSharedValue(0);
 
   const checkUserDocComplete = () => {
     console.log(userData);
-    userData?.pincode
-      ? navigation.navigate("AppView")
-      : navigation.navigate("Form");
+    return ("pincode" in userData);
   };
 
-  
   const onViewableItemsChanged = ({ viewableItems }) => {
     if (viewableItems[0].index !== null) {
       flatListIndex.value = viewableItems[0].index;
@@ -29,8 +35,12 @@ const Welcome = ({ navigation }) => {
   };
 
   const handleNavigation = () => {
-    navigation.navigate("AppView")
-  }
+    if (checkUserDocComplete()) {
+      navigation.navigate("AppView");
+    } else {
+      navigation.navigate("Form");
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -73,8 +83,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-evenly",
   },
-  flatlist:{
-    height:Dimensions.get("window").height,
+  flatlist: {
+    height: Dimensions.get("window").height,
   },
   titleText: {
     fontSize: 20,
@@ -82,9 +92,9 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontFamily: "sans-serif",
   },
-  nextButton:{
-    position:"absolute",
-    bottom:30,
-    right:30,
+  nextButton: {
+    position: "absolute",
+    bottom: 30,
+    right: 30,
   },
 });

@@ -12,6 +12,7 @@ import { Satisfy_400Regular } from "@expo-google-fonts/satisfy";
 import { useFonts } from "expo-font";
 import { useEffect } from "react";
 import { VariantProvider } from "./hooks/VariantContext";
+import { ProductProvider } from "./hooks/ProductContext";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -38,7 +39,9 @@ export default function App() {
     <NavigationContainer>
       <AuthProvider>
         <VariantProvider>
-          <StackNavigator />
+          <ProductProvider>
+            <StackNavigator />
+          </ProductProvider>
         </VariantProvider>
       </AuthProvider>
     </NavigationContainer>

@@ -8,6 +8,8 @@ import {
   ScrollView,
   ImageBackground,
   Dimensions,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import { signUpUserWithEmailAndPassword } from "../../config/fireabse.utils";
 import { Style } from "../../constants/ComponentStyle";
@@ -24,7 +26,7 @@ const SignUp = ({ navigation }) => {
     if (password === confirmPassword) {
       try {
         await signUpUserWithEmailAndPassword(email, password);
-        navigation.navigate("SignUp");
+        navigation.navigate("SignIn");
       } catch (e) {
         console.log("CreateUserWithEmailAndPassword Error:", e);
       }
@@ -33,84 +35,90 @@ const SignUp = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollViewContainer}>
-        <ImageBackground
-          source={require("../../assets/SignUpBackground.png")}
-          resizeMode="cover"
-          style={styles.backgroundImage}
-        >
-          <View style={Style.logInTextContainer}>
-            <Text style={Style.titleText}>Create Account</Text>
-          </View>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={styles.container}
+        enabled={true}
+      >
+        <ScrollView>
+          <ImageBackground
+            source={require("../../assets/SignUpBackground.png")}
+            resizeMode="cover"
+            style={styles.backgroundImage}
+          >
+            <View style={Style.logInTextContainer}>
+              <Text style={Style.titleText}>Create Account</Text>
+            </View>
 
-          <View style={[Style.inputContainer, { marginTop: 70 }]}>
-            <InputField
-              value={email}
-              placeholder="Enter Email"
-              onChange={(val) => {
-                setEmail(val);
-              }}
-            />
-            <InputField
-              value={password}
-              placeholder="Enter Password"
-              onChange={(val) => {
-                setPassword(val);
-              }}
-              secureTextEntry={true}
-            />
-            <InputField
-              value={confirmPassword}
-              placeholder="Confirm Password"
-              onChange={(val) => {
-                setConfirmPassword(val);
-              }}
-              secureTextEntry={true}
-            />
-            <Text
-              style={[
-                Style.secondaryText,
-                {
-                  color: "#f7f7f9",
-                  marginTop: 5,
-                  marginLeft: 5,
-                  alignSelf: "flex-start",
-                  flexDirection: "row",
-                },
-              ]}
-            >
-              Password must be 8 characters.
-            </Text>
-          </View>
+            <View style={[Style.inputContainer, { marginTop: 70 }]}>
+              <InputField
+                value={email}
+                placeholder="Enter Email"
+                onChange={(val) => {
+                  setEmail(val);
+                }}
+              />
+              <InputField
+                value={password}
+                placeholder="Enter Password"
+                onChange={(val) => {
+                  setPassword(val);
+                }}
+                secureTextEntry={true}
+              />
+              <InputField
+                value={confirmPassword}
+                placeholder="Confirm Password"
+                onChange={(val) => {
+                  setConfirmPassword(val);
+                }}
+                secureTextEntry={true}
+              />
+              <Text
+                style={[
+                  Style.secondaryText,
+                  {
+                    color: "#f7f7f9",
+                    marginTop: 5,
+                    marginLeft: 5,
+                    alignSelf: "flex-start",
+                    flexDirection: "row",
+                  },
+                ]}
+              >
+                Password must be 8 characters.
+              </Text>
+            </View>
 
-          <View style={[Style.bottomButtonContainer, { marginTop: 60 }]}>
-            <ButtonComponent
-              onPress={handleSignUp}
-              color={Colors.accentColor}
-              text="Sign Up"
-            />
-            <Text
-                  style={[
-                    Style.secondaryText,
-                    {
-                      color: "#3c3c3c",
-                    },
-                  ]}
-                >
-                  Already have an account?
+            <View style={[Style.bottomButtonContainer, { marginTop: 60 }]}>
+              <ButtonComponent
+                onPress={handleSignUp}
+                color={Colors.accentColor}
+                text="Sign Up"
+              />
+              <Text
+                style={[
+                  Style.secondaryText,
+                  {
+                    color: "#3c3c3c",
+                  },
+                ]}
+              >
+                Already have an account?
+              </Text>
+              <Pressable
+                onPress={() => {
+                  navigation.navigate("SignIn");
+                }}
+              >
+                <Text style={[Style.secondaryText, { color: "#F1916D" }]}>
+                  Log In
                 </Text>
-                <Pressable
-                  onPress={() => {
-                    navigation.navigate("SignIn");
-                  }}
-                >
-                  <Text style={[Style.secondaryText, { color: "#F1916D" }]}>
-                    Log In
-                  </Text>
-                </Pressable>
-          </View>
-        </ImageBackground>
-      </ScrollView>
+              </Pressable>
+            </View>
+          </ImageBackground>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </View>
   );
 };
@@ -125,7 +133,6 @@ const styles = StyleSheet.create({
   },
   backgroundImage: {
     alignItems: "center",
-    position: "absolute",
     left: 0,
     top: 0,
     width: Dimensions.get("window").width,

@@ -46,28 +46,22 @@ const Form = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <ImageBackground
-        style={styles.backgroundImage}
-        source={require("../../assets/Formbackground.png")}
-        resizeMode="cover"
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={styles.container}
       >
-        <ScrollView
-          contentContainerStyle={{
-            alignItems: "center",
-            width: Dimensions.get("window").width,
-            justifyContent: "center",
-          }}
-        >
-          <KeyboardAvoidingView
-            behavior={Platform.OS === "ios" ? "padding" : "height"}
-            style={styles.container}
+        <ScrollView>
+          <ImageBackground
+            style={styles.backgroundImage}
+            source={require("../../assets/Formbackground.png")}
+            resizeMode="cover"
           >
-            <View style={[Style.logInTextContainer,{marginTop:100}]}>
+            <View style={[Style.logInTextContainer, { marginTop: 100 }]}>
               <Text style={Style.titleText}>More About you</Text>
               <Text style={Style.secondaryText}>Help us with you details</Text>
             </View>
 
-            <View style={[Style.inputContainer, { marginTop:10 }]}>
+            <View style={[Style.inputContainer, { marginTop: 10 }]}>
               <InputField
                 placeholder="Full Name"
                 value={userData.displayName}
@@ -102,8 +96,8 @@ const Form = ({ navigation }) => {
                     marginTop: 5,
                     marginLeft: 5,
                     alignSelf: "flex-start",
-                    width:"80%",
-                    fontSize:15
+                    width: "80%",
+                    fontSize: 15,
                   },
                 ]}
               >
@@ -127,9 +121,9 @@ const Form = ({ navigation }) => {
                 onPress={handleFormSubmit}
               />
             </View>
-          </KeyboardAvoidingView>
+          </ImageBackground>
         </ScrollView>
-      </ImageBackground>
+      </KeyboardAvoidingView>
     </View>
   );
 };
@@ -139,13 +133,12 @@ export default Form;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    width:"100%",
-    alignItems: "center",
-    justifyContent: "center",
+    // width: "100%",
+    // alignItems: "center",
+    // justifyContent: "center",
   },
   backgroundImage: {
     alignItems: "center",
-    position: "absolute",
     left: 0,
     top: 0,
     width: Dimensions.get("window").width,

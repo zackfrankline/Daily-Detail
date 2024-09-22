@@ -7,9 +7,8 @@
 
 
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Variant from "../screens/car-variant/car-variant.component";
 import { Icon } from "@rneui/base";
-import { Calendar } from "../screens/calendar-container/calendar-container.component";
+import { Calendar, UserSettings } from "../screens/calendar-container/calendar-container.component";
 import { ProfileCalendarScreen } from "../screens/profile-calendar/profile-calendar.screen";
 
 const Tab = createBottomTabNavigator();
@@ -33,8 +32,8 @@ export const BottomTabNavigator = () => {
         }}
       />
       <Tab.Screen
-        name="Calendar"
-        component={Calendar}
+        name="User Settings"
+        component={UserSettings}
         options={{
           headerShown: true,
           tabBarIcon: ({ color, size }) => (

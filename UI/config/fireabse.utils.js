@@ -6,7 +6,14 @@ import {
 } from "firebase/auth";
 import { auth } from "./firebaseConfig";
 import { FIREBASE_DB } from "./firebaseConfig";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  setDoc,
+  writeBatch,
+} from "firebase/firestore";
 
 //User Sign In with email and password;
 export const signInUserWithEmailAndPassword = async (email, password) =>
@@ -18,6 +25,31 @@ export const signUpUserWithEmailAndPassword = async (email, password) =>
 
 //user sign out
 export const signOutUser = async () => await signOut(auth);
+
+//function to Write muliple documents in a new Collection
+export const writeDataToCollection = async (collectionKey, objects) => {
+  const collectionRef = collection(FIREBASE_DB, collectionKey);
+  const batch = writeBatch(FIREBASE_DB);
+
+  objects.forEach((object) => {
+    const docRef = doc(collectionRef, object.title.toLowerCase());
+    batch.set(docRef, object);
+  });
+
+  await batch.commit();
+  console.log("done");
+};
+
+//function to fetch all variant documents from Service Tier collection
+export const fetchDatafromCollection = async (CollectionKey) => {
+  console.log(CollectionKey);
+  const querySnapshot = await getDocs(collection(FIREBASE_DB, CollectionKey));
+  const productMap = querySnapshot.docs.reduce((accumulator, doc, index) => {
+    accumulator.push(doc.data());
+    return accumulator;
+  }, []);
+  return productMap
+};
 
 //Auth observer Listener
 export const onAuthStateChangedUser = (callback) =>
@@ -38,9 +70,7 @@ export const createUserDocFromAuth = async (userAuth, defaultData = {}) => {
         displayName,
         email,
         createdAt,
-        subscription_start_date:null,
-        subscription_end_date:null,
-        active_subscription:false,
+        active_subscription: false,
       });
     } catch (err) {
       console.log("set User Doc error:" + err);
