@@ -16,7 +16,7 @@ const StackNavigator = () => {
   const { currentUser } = useContext(AuthContext);
   return (
     // <Stack.Navigator initialRouteName={currentUser ? "Variant-detail" : "Home"}>
-     <Stack.Navigator initialRouteName="AppView"> 
+     <Stack.Navigator initialRouteName="SignIn"> 
       <Stack.Screen
         name="Home"
         component={HomeScreen}
