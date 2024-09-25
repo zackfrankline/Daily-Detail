@@ -3,7 +3,7 @@ import {
   createUserDocFromAuth,
   getUserDocFirestore,
   onAuthStateChangedUser,
-} from "../config/fireabse.utils";
+} from "../services/fireabse.utils";
 
 export const AuthContext = createContext({
   currentUser: null,

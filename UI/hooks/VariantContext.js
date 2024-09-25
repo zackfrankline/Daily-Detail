@@ -1,6 +1,4 @@
 import { createContext, useEffect, useState } from "react";
-import carVariantData from "../moke-up-data/cars";
-import { writeDataToCollection } from "../config/fireabse.utils";
 
 export const VariantContext = createContext({
     currentSelectedVariant:null,

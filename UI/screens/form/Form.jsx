@@ -3,38 +3,55 @@ import {
   Text,
   View,
   StyleSheet,
-  Pressable,
   ScrollView,
   ImageBackground,
   Dimensions,
   KeyboardAvoidingView,
   Platform,
 } from "react-native";
-import Input from "./Input";
+
+import * as yup from "yup"
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { AuthContext } from "../../hooks/AuthContext";
 import { Style } from "../../constants/ComponentStyle";
-import InputField from "../../components/InputField";
+
 import ButtonComponent from "../../components/button";
 import { Colors } from "../../constants/colors";
 
-const userPersonalDetails = {
-  displayName: null,
-  address: null,
-  phone: null,
-  pincode: null,
-  buildingName: null,
-};
+import FormInputController from "../../components/controllers/FormInputController";
+
 
 const Form = ({ navigation }) => {
   const { storeUserDetail } = useContext(AuthContext);
-  const [userData, setUserData] = useState(userPersonalDetails);
+  
+  const phoneNumberRules = /^(?:(?:\+|0{0,2})91(\s*[\-]\s*)?|[0]?)?[789]\d{9}$/;
 
-  const handleTextChange = (id, val) => {
-    setUserData({ ...userData, [id]: val });
-    console.log(userData);
-  };
 
-  const handleFormSubmit = async () => {
+  const userDataSchema = yup.object().shape({
+    fullName:yup.string().required("Your name is required"),
+    phone:yup.string().matches(phoneNumberRules,"Please enter valid Phone No.").required("Phone Number is Required"),
+    address:yup.string().required("Address is required"),
+    pincode:yup.string().min(6,"Pincode is invalid").max(6,"Pincode is invalid").required("Pincode is required"),
+    building:yup.string().required("Building number or name is required"),
+  });
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(userDataSchema),
+    defaultValues: {
+      fullName: "",
+      phone: "",
+      address: "",
+      pincode: "",
+      building:'',
+    },
+  });
+
+  const storeUserData = async (userData) => {
     console.log("Pressed");
     try {
       await storeUserDetail(userData);
@@ -43,6 +60,8 @@ const Form = ({ navigation }) => {
       console.log("Form request to send UserData Error:" + e);
     }
   };
+
+  const onSubmit = (data) => storeUserData(data)
 
   return (
     <View style={styles.container}>
@@ -62,32 +81,49 @@ const Form = ({ navigation }) => {
             </View>
 
             <View style={[Style.inputContainer, { marginTop: 10 }]}>
-              <InputField
-                placeholder="Full Name"
-                value={userData.displayName}
-                inputMode="text"
-                onChange={(val) => handleTextChange("displayName", val)}
+              <FormInputController
+                control={control}
+                name="fullName"
+                placeholder="Enter your full name"
               />
-              <InputField
-                placeholder="Phone number"
-                value={userData.phone}
-                onChange={(val) => handleTextChange("phone", val)}
+              {errors.fullName && (
+                <Text style={styles.errorMessage}>{errors.fullName.message}</Text>
+              )}
+              <FormInputController
+                control={control}
+                name="phone"
+                placeholder="Enter your phone number"
+                keyboardType="numeric"
               />
-              <InputField
+              {errors.phone && (
+                <Text style={styles.errorMessage}>{errors.phone.message}</Text>
+              )}
+              <FormInputController
+                control={control}
+                name="address"
+                placeholder="Enter Address (Street/plotno/sector)"
+              />
+              {errors.address && (
+                <Text style={styles.errorMessage}>{errors.address.message}</Text>
+              )}
+              <FormInputController
+                control={control}
+                name="pincode"
+                keyboardType="numeric"
                 placeholder="Pincode"
-                value={userData.pincode}
-                onChange={(val) => handleTextChange("pincode", val)}
               />
-              <InputField
-                placeholder="Street/plotno/sector"
-                value={userData.address}
-                onChange={(val) => handleTextChange("address", val)}
+              {errors.pincode && (
+                <Text style={styles.errorMessage}>{errors.pincode.message}</Text>
+              )}
+              <FormInputController
+                control={control}
+                name="building"
+                placeholder="Building number or name"
               />
-              <InputField
-                placeholder="Building Name"
-                value={userData.buildingName}
-                onChange={(val) => handleTextChange("buildingName", val)}
-              />
+              {errors.building && (
+                <Text style={styles.errorMessage}>{errors.building.message}</Text>
+              )}
+              
               <Text
                 style={[
                   Style.secondaryText,
@@ -109,7 +145,7 @@ const Form = ({ navigation }) => {
               <ButtonComponent
                 text="Continue"
                 color={Colors.buttonColor}
-                onPress={handleFormSubmit}
+                onPress={handleSubmit(onSubmit)}
               />
             </View>
           </ImageBackground>
@@ -163,5 +199,12 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "#fff",
     letterSpacing: 1,
+  },
+  errorMessage: {
+    textAlign: "left",
+    alignSelf: "flex-start",
+    // borderWidth:3,
+    width: "100%",
+    color: "red",
   },
 });

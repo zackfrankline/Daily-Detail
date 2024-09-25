@@ -4,8 +4,8 @@ import {
   signInWithEmailAndPassword,
   signOut,
 } from "firebase/auth";
-import { auth } from "./firebaseConfig";
-import { FIREBASE_DB } from "./firebaseConfig";
+import { auth } from "../config/firebaseConfig";
+import { FIREBASE_DB } from "../config/firebaseConfig";
 import {
   collection,
   doc,

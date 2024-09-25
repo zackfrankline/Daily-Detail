@@ -8,7 +8,7 @@
 
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Icon } from "@rneui/base";
-import { Calendar, UserSettings } from "../screens/calendar-container/calendar-container.component";
+import { Calendar, UserSettings } from "../screens/user-setting/user-settings.screen";
 import { ProfileCalendarScreen } from "../screens/profile-calendar/profile-calendar.screen";
 
 const Tab = createBottomTabNavigator();

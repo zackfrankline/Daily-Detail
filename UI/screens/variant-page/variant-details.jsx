@@ -10,8 +10,13 @@ import {
   unstable_batchedUpdates,
   View,
 } from "react-native";
+
+import * as yup from 'yup'
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+
 import { Colors } from "../../constants/colors";
-import InputField from "../../components/InputField";
+
 import ButtonComponent from "../../components/button";
 import { Style } from "../../constants/ComponentStyle";
 import { useContext, useState } from "react";
@@ -19,6 +24,7 @@ import { AuthContext } from "../../hooks/AuthContext";
 import { VariantContext } from "../../hooks/VariantContext";
 import { productfeatureCardDetails } from "./productFeatures";
 import { IMAGES } from "../../assets";
+import FormInputController from "../../components/controllers/FormInputController";
 
 
 const FeatureCard = ({ img, title, desc }) => {
@@ -54,8 +60,24 @@ const FeatureCard = ({ img, title, desc }) => {
 };
 
 const VariantDetails = ({ navigation }) => {
-  const [vehicleNo, setVehicleNo] = useState(null);
-  const [parkingNo, setParkingNo] = useState(null);
+
+  const oldVehicleRegex = /(^[A-Z]{2}[0-9]{2}[A-HJ-NP-Z]{1,2}[0-9]{4}$|^[0-9]{2}BH[0-9]{4}[A-HJ-NP-Z]{1,2}$)/;
+
+
+
+  const schema = yup.object().shape({
+    vehicleNo:yup.string().matches(oldVehicleRegex ,"Please Enter Valid Vehicle Number").required("Vehicle Number is Required"),
+    parkingNo:yup.string().required("Parking Number is required"),
+  })
+
+  const {control, handleSubmit,formState:{errors}} = useForm({
+    resolver:yupResolver(schema),
+    defaultValues:{
+      vehicleNo:"",
+      parkingNo:""
+    }
+  })
+
 
   const { userData } = useContext(AuthContext);
   const { currentSelectedVariant } = useContext(VariantContext);
@@ -67,6 +89,8 @@ const VariantDetails = ({ navigation }) => {
     const newProfile = {vechile_no:vehicleNo,parking_no:parkingNo}
     console.log(newProfile)
   };
+
+  const onSubmit = (data) => console.log(data);
 
   return (
     <KeyboardAvoidingView
@@ -86,9 +110,7 @@ const VariantDetails = ({ navigation }) => {
           <View style={styles.headerContainer}>
             <View style={styles.titleAndDesc}>
               <Text style={styles.title}>{title}</Text>
-              <Text style={styles.desc}>
-                {desc}
-              </Text>
+              <Text style={styles.desc}>{desc}</Text>
             </View>
             <View style={styles.priceContainer}>
               <Text
@@ -118,36 +140,26 @@ const VariantDetails = ({ navigation }) => {
             />
           </View>
           <View style={{ marginVertical: 15 }}>
-            <InputField
-              placeholder="Vehicle Number"
-              value={vehicleNo}
-              onChange={(val) => {
-                setVehicleNo(val);
-              }}
+            <FormInputController
+              control={control}
+              name="vehicleNo"
+              placeholder="Enter your Vehicle Number"
             />
-
-            <InputField
-              placeholder="Parking Number"
-              value={parkingNo}
-              onChange={(val) => {
-                setParkingNo(val);
-              }}
+            {errors.vehicleNo && <Text style={styles.errorMessage}>{errors.vehicleNo.message}</Text>}
+            <FormInputController
+              control={control}
+              name="parkingNo"
+              placeholder="Enter your Parking Number"
             />
+            {errors.parkingNo && <Text style={styles.errorMessage}>{errors.parkingNo.message}</Text>}
             <View style={{ marginVertical: 20 }}>
-              {!(vehicleNo && parkingNo) ? (
+               
                 <ButtonComponent
-                  onPress={handleBookNow}
+                  onPress={handleSubmit(onSubmit)}
                   text="Book Now"
-                  color={Colors.paraTextColor}
-                  disabled={true}
+                  color={Colors.buttonColor}
                 />
-              ) : (
-                <ButtonComponent
-                  onPress={handleBookNow}
-                  text="Book Now"
-                  color={Colors.primaryColor}
-                />
-              )}
+              
             </View>
           </View>
         </View>
@@ -223,6 +235,13 @@ const styles = StyleSheet.create({
   featureCardText: {
     flex: 2,
     alignItems: "center",
+  },
+  errorMessage: {
+    textAlign: "left",
+    alignSelf: "flex-start",
+    marginLeft:20,
+    width: "100%",
+    color: "red",
   },
 });
 

@@ -20,7 +20,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import {
   signInUserWithEmailAndPassword,
   signOutUser,
-} from "../../config/fireabse.utils";
+} from "../../services/fireabse.utils";
 
 import { AuthContext } from "../../hooks/AuthContext";
 import { Style } from "../../constants/ComponentStyle";

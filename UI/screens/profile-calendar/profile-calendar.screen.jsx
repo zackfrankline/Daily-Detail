@@ -6,11 +6,11 @@ import {
   Text,
   View,
 } from "react-native";
-import { Colors } from "../../constants/colors";
 import AntDesign from "@expo/vector-icons/AntDesign";
-import { Calendar, CalendarList, Agenda } from "react-native-calendars";
-import { useEffect, useState } from "react";
+import { Calendar } from "react-native-calendars";
+import { useState } from "react";
 import { Style } from "../../constants/ComponentStyle";
+import ProfileCard from "../../components/subscribedProfile";
 
 const subscribedProfiledata = [
   {
@@ -42,41 +42,12 @@ const subscribedProfiledata = [
   },
 ];
 
-const ProfileCard = ({ title, days, index, orderId, handlePress }) => {
-  return (
-    <View
-      style={{
-        width: 150,
-        height: 100,
-        backgroundColor: Colors.titleTextColor,
-        marginHorizontal: 10,
-        borderRadius: 20,
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
-      <Pressable
-        onPress={() => {
-          handlePress(orderId);
-        }}
-      >
-        <View>
-          <Text style={{ color: "white" }}>{title}</Text>
-        </View>
-        <View>
-          <Text style={{ color: "white" }}>Validity: {days} days</Text>
-        </View>
-      </Pressable>
-    </View>
-    
-  );
-};
+
 
 export const ProfileCalendarScreen = ({navigation}) => {
   const [selectedProfile, setSelectedProfile] = useState(subscribedProfiledata[0]);
-  const [markedDates, setMarkedDates] = useState(null);
 
-  useEffect(() => {
+  const updateMarkedDates = () => {
     let { subscription_start_data, subscription_end_data, wash_record } =
       selectedProfile;
     let dates = [
@@ -101,15 +72,15 @@ export const ProfileCalendarScreen = ({navigation}) => {
       } else {
         marked[element] = { marked: true };
       }
-    });
-    setMarkedDates(marked)
-  }, [selectedProfile]);
+    })
+    return marked;
+  };
 
-  const { Width, Height } = Dimensions.get("window");
+
+  const markedDates = updateMarkedDates();
 
   const handleProfileSelection = (orderID) => {
     setSelectedProfile(subscribedProfiledata.find((item) => item.orderID === orderID));
-    // console.log(selectedProfile)
   };
 
   const handleProfileAdd = () =>{
@@ -122,16 +93,7 @@ export const ProfileCalendarScreen = ({navigation}) => {
       <View style={[styles.profileFlatListContainer, { flexDirection: "row" }]}>
         <Pressable
           onPress={handleProfileAdd}
-          style={{
-            width: 100,
-            height: 100,
-            marginHorizontal: 10,
-            borderRadius: 20,
-            borderWidth: 2,
-            borderStyle: "dashed",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
+          style={styles.addButton}
         >
           <AntDesign name="pluscircle" size={32} color="black" />
         </Pressable>
@@ -170,9 +132,18 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "white",
   },
-  profileFlatListContainer:{
-    marginLeft:10,
-    marginBottom:20,
-    // marginVertical:10,
-  }
+  profileFlatListContainer: {
+    marginLeft: 10,
+    marginBottom: 20,
+  },
+  addButton: {
+    width: 100,
+    height: 100,
+    marginHorizontal: 10,
+    borderRadius: 20,
+    borderWidth: 2,
+    borderStyle: "dashed",
+    alignItems: "center",
+    justifyContent: "center",
+  },
 });

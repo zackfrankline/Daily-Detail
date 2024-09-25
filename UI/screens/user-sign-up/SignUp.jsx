@@ -14,7 +14,7 @@ import {
 } from "react-native";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
-import { signUpUserWithEmailAndPassword } from "../../config/fireabse.utils";
+import { signUpUserWithEmailAndPassword } from "../../services/fireabse.utils";
 import { Style } from "../../constants/ComponentStyle";
 import InputField from "../../components/InputField";
 import ButtonComponent from "../../components/button";

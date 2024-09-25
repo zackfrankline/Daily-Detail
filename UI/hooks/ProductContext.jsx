@@ -1,5 +1,5 @@
 import { createContext, useEffect, useMemo, useState } from "react";
-import { fetchDatafromCollection } from "../config/fireabse.utils";
+import { fetchDatafromCollection } from "../services/fireabse.utils";
 
 export const ProductContext = createContext({
     products:null,
