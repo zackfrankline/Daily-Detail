@@ -51,8 +51,9 @@ export const Style = StyleSheet.create({
     marginTop: 170,
   },
   bottomButtonContainer: {
-    marginTop: 140,
     width: "80%",
     alignItems: "center",
+    marginTop:"auto",
+    marginBottom:10,
   },
 }); 

@@ -32,8 +32,8 @@ import FormInputController from "../../components/controllers/FormInputControlle
 const SignIn = ({ navigation }) => {
 
   const schema = yup.object().shape({
-    email:yup.string().required("Email is required").email('Invalid email'),
-    password:yup.string().required("Password is required").min(8,"Password must contain at least 8 characters"),
+    email:yup.string().trim().required("Email is required").email('Invalid email'),
+    password:yup.string().trim().required("Password is required").min(8,"Password must contain at least 8 characters"),
   });
   
   const {
@@ -56,20 +56,10 @@ const SignIn = ({ navigation }) => {
     Alert.alert(
       "Error",
       `${errorCode}`,
-      [
-        {
-          text: "Cancel",
-          onPress: () => Alert.alert("Cancelled"),
-          style: "cancel",
-        },
-      ],
-      {
-        cancelable: true,
-      }
     );
   };
 
-  const handleSignIn = async () => {
+  const handleSignIn = async ({email,password}) => {
     try {
       const { user } = await signInUserWithEmailAndPassword(email, password);
       user && navigation.navigate("Welcome");
@@ -82,7 +72,7 @@ const SignIn = ({ navigation }) => {
     await signOutUser();
   };
 
-  const onSubmit = (data) => console.log(data); 
+  const onSubmit = (data) => handleSignIn(data); 
 
   return (
     <KeyboardAvoidingView
@@ -142,12 +132,7 @@ const SignIn = ({ navigation }) => {
             </View>
 
             <View style={Style.bottomButtonContainer}>
-              {/* <ButtonComponent
-                text="Log In"
-                onPress={handleSignIn}
-                color={Colors.buttonColor}
-                disabled={false}
-              /> */}
+              
               <ButtonComponent
                 text="Log In"
                 onPress={handleSubmit(onSubmit)}

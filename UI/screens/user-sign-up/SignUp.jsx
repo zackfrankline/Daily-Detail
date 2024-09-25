@@ -10,28 +10,78 @@ import {
   Dimensions,
   KeyboardAvoidingView,
   Platform,
+  Alert,
 } from "react-native";
+import * as yup from "yup";
+import { useForm } from "react-hook-form";
 import { signUpUserWithEmailAndPassword } from "../../config/fireabse.utils";
 import { Style } from "../../constants/ComponentStyle";
 import InputField from "../../components/InputField";
 import ButtonComponent from "../../components/button";
 import { Colors } from "../../constants/colors";
+import FormInputController from "../../components/controllers/FormInputController";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 const SignUp = ({ navigation }) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const schema = yup.object().shape({
+    email: yup
+      .string()
+      .trim()
+      .required("Email is required")
+      .email("Invalid email"),
+    password: yup
+      .string()
+      .matches(/^\S*$/, "Whitespace is not allowed")
+      .required("Password is required")
+      .min(8, "Password must contain at least 8 characters"),
+    confirmPassword: yup
+      .string()
+      .matches(/^\S*$/, "Whitespace is not allowed")
+      .required("Please re-type your Password")
+      .oneOf([yup.ref("password")], "Your passwords do not match"),
+  });
 
-  const handleSignUp = async () => {
-    if (password === confirmPassword) {
-      try {
-        await signUpUserWithEmailAndPassword(email, password);
-        navigation.navigate("SignIn");
-      } catch (e) {
-        console.log("CreateUserWithEmailAndPassword Error:", e);
-      }
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+    defaultValues: {
+      email: "",
+      password: "",
+      confirmPassword: "",
+    },
+  });
+
+  const handleSignUp = async ({email,password}) => {
+    try {
+      await signUpUserWithEmailAndPassword(email, password);
+      navigation.navigate("SignIn");
+    } catch (e) {
+      console.log("CreateUserWithEmailAndPassword Error:", e);
+      handleErrorAlert(e.code);
     }
   };
+
+  const handleErrorAlert = (errorCode) => {
+    Alert.alert(
+      "Error",
+      `${errorCode}`,
+      [
+        {
+          text: "Cancel",
+          onPress: () => Alert.alert("Cancelled"),
+          style: "cancel",
+        },
+      ],
+      {
+        cancelable: true,
+      }
+    );
+  };
+
+  const onSubmit = (data) => handleSignUp(data);
 
   return (
     <View style={styles.container}>
@@ -51,29 +101,36 @@ const SignUp = ({ navigation }) => {
             </View>
 
             <View style={[Style.inputContainer, { marginTop: 70 }]}>
-              <InputField
-                value={email}
+              <FormInputController
+                control={control}
+                name="email"
                 placeholder="Enter Email"
-                onChange={(val) => {
-                  setEmail(val);
-                }}
               />
-              <InputField
-                value={password}
+              {errors.email && (
+                <Text style={styles.errorMessage}>{errors.email.message}</Text>
+              )}
+              <FormInputController
+                control={control}
+                name="password"
                 placeholder="Enter Password"
-                onChange={(val) => {
-                  setPassword(val);
-                }}
                 secureTextEntry={true}
               />
-              <InputField
-                value={confirmPassword}
+              {errors.password && (
+                <Text style={styles.errorMessage}>
+                  {errors.password.message}
+                </Text>
+              )}
+              <FormInputController
+                control={control}
+                name="confirmPassword"
                 placeholder="Confirm Password"
-                onChange={(val) => {
-                  setConfirmPassword(val);
-                }}
                 secureTextEntry={true}
               />
+              {errors.confirmPassword && (
+                <Text style={styles.errorMessage}>
+                  {errors.confirmPassword.message}
+                </Text>
+              )}
               <Text
                 style={[
                   Style.secondaryText,
@@ -83,6 +140,7 @@ const SignUp = ({ navigation }) => {
                     marginLeft: 5,
                     alignSelf: "flex-start",
                     flexDirection: "row",
+                    width: "100%",
                   },
                 ]}
               >
@@ -90,9 +148,9 @@ const SignUp = ({ navigation }) => {
               </Text>
             </View>
 
-            <View style={[Style.bottomButtonContainer, { marginTop: 60 }]}>
+            <View style={[Style.bottomButtonContainer]}>
               <ButtonComponent
-                onPress={handleSignUp}
+                onPress={handleSubmit(onSubmit)}
                 color={Colors.accentColor}
                 text="Sign Up"
               />
@@ -171,6 +229,13 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "#fff",
     letterSpacing: 1,
+  },
+  errorMessage: {
+    textAlign: "left",
+    alignSelf: "flex-start",
+    marginLeft: 5,
+    width: "100%",
+    color: "white",
   },
 });
 

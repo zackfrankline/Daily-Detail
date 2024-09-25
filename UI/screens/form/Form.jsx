@@ -105,16 +105,7 @@ const Form = ({ navigation }) => {
               </Text>
             </View>
 
-            <View
-              style={[
-                Style.bottomButtonContainer,
-                {
-                  alignItems: "center",
-                  justifyContent: "center",
-                  marginTop: 0,
-                },
-              ]}
-            >
+            <View style={Style.bottomButtonContainer}>
               <ButtonComponent
                 text="Continue"
                 color={Colors.buttonColor}
