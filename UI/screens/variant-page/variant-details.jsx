@@ -91,7 +91,10 @@ const VariantDetails = ({ navigation }) => {
     console.log(newProfile)
   };
 
-  const onSubmit = (data) => console.log(data);
+  const onSubmit = (data) =>{
+    // send amount,description, prefil data{email,contact,name} 
+    console.log(data);
+  }
 
   return (
     <KeyboardAvoidingView
