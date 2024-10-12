@@ -2,6 +2,7 @@ import {
   Dimensions,
   FlatList,
   Image,
+  ImageBackground,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
@@ -99,12 +100,11 @@ const VariantDetails = ({ navigation }) => {
       enabled={true}
     >
       <ScrollView contentContainerStyle={styles.scrollViewContainer}>
-        <View style={styles.variantPic}>
-          <Image
-            resizeMode="cover"
-            source={require("../../assets/Background/variant-bg.png")}
-          />
-          <View style={styles.car}></View>
+        <View
+          source={require("../../assets/Background/variant-bg.png")}
+          style={styles.variantPic}
+        >
+          <Image source={IMAGES[title+"ScreenImg"]} />
         </View>
         <View style={styles.detailCard}>
           <View style={styles.headerContainer}>
@@ -145,21 +145,27 @@ const VariantDetails = ({ navigation }) => {
               name="vehicleNo"
               placeholder="Enter your Vehicle Number"
             />
-            {errors.vehicleNo && <Text style={styles.errorMessage}>{errors.vehicleNo.message}</Text>}
+            {errors.vehicleNo && (
+              <Text style={styles.errorMessage}>
+                {errors.vehicleNo.message}
+              </Text>
+            )}
             <FormInputController
               control={control}
               name="parkingNo"
               placeholder="Enter your Parking Number"
             />
-            {errors.parkingNo && <Text style={styles.errorMessage}>{errors.parkingNo.message}</Text>}
+            {errors.parkingNo && (
+              <Text style={styles.errorMessage}>
+                {errors.parkingNo.message}
+              </Text>
+            )}
             <View style={{ marginVertical: 20 }}>
-               
-                <ButtonComponent
-                  onPress={handleSubmit(onSubmit)}
-                  text="Book Now"
-                  color={Colors.buttonColor}
-                />
-              
+              <ButtonComponent
+                onPress={handleSubmit(onSubmit)}
+                text="Book Now"
+                color={Colors.buttonColor}
+              />
             </View>
           </View>
         </View>
@@ -184,6 +190,16 @@ const styles = StyleSheet.create({
   },
   variantPic: {
     maxHeight: 250,
+    height:250,
+    alignItems:"center",
+    justifyContent:"center"
+  },
+  carImage:{
+    flex:1,
+    height:200,
+    width:300,
+    marginTop:60,
+    alignSelf:"flex-end"
   },
   headerContainer: {
     marginVertical: 20,
