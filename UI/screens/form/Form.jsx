@@ -29,7 +29,7 @@ const Form = ({ navigation }) => {
 
 
   const userDataSchema = yup.object().shape({
-    fullName:yup.string().required("Your name is required"),
+    displayName:yup.string().required("Your name is required"),
     phone:yup.string().matches(phoneNumberRules,"Please enter valid Phone No.").required("Phone Number is Required"),
     address:yup.string().required("Address is required"),
     pincode:yup.string().min(6,"Pincode is invalid").max(6,"Pincode is invalid").required("Pincode is required"),
@@ -43,7 +43,7 @@ const Form = ({ navigation }) => {
   } = useForm({
     resolver: yupResolver(userDataSchema),
     defaultValues: {
-      fullName: "",
+      displayName: "",
       phone: "",
       address: "",
       pincode: "",
@@ -83,11 +83,11 @@ const Form = ({ navigation }) => {
             <View style={[Style.inputContainer, { marginTop: 10 }]}>
               <FormInputController
                 control={control}
-                name="fullName"
+                name="displayName"
                 placeholder="Enter your full name"
               />
-              {errors.fullName && (
-                <Text style={styles.errorMessage}>{errors.fullName.message}</Text>
+              {errors.displayName && (
+                <Text style={styles.errorMessage}>{errors.displayName.message}</Text>
               )}
               <FormInputController
                 control={control}

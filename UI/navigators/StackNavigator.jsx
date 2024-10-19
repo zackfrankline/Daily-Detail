@@ -9,6 +9,9 @@ import { useContext } from "react";
 import { BottomTabNavigator } from "./BottomTabNavigator";
 import VariantDetails from "../screens/variant-page/variant-details";
 import Variant from "../screens/variant-selection-screen/variant-selection.component";
+import { PersonalDetails } from "../screens/Personal details screen/PersonalDetails.screen";
+import { Address } from "../screens/Address Screen/Address";
+import { SuccessScreen } from "../screens/Success Screen/SuccessScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -16,7 +19,7 @@ const StackNavigator = () => {
   const { currentUser } = useContext(AuthContext);
   return (
     // <Stack.Navigator initialRouteName={currentUser ? "Variant-detail" : "Home"}>
-     <Stack.Navigator initialRouteName="AppView"> 
+    <Stack.Navigator initialRouteName="SignIn">
       <Stack.Screen
         name="Home"
         component={HomeScreen}
@@ -57,6 +60,21 @@ const StackNavigator = () => {
         component={VariantDetails}
         options={{ headerShown: false }}
       />
+      <Stack.Screen
+        name="Personal Details"
+        component={PersonalDetails}
+        options={{ headerShown: true }}
+      />
+      <Stack.Screen
+        name="Address"
+        component={Address}
+        options={{ headerShown: true }}
+      />
+      <Stack.Screen 
+        name="Success"
+        component={SuccessScreen}
+        options={{headerShown:false}}
+        />
     </Stack.Navigator>
   );
 };

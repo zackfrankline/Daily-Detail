@@ -7,7 +7,7 @@ const checkdb = async () => {
   );
 };
 
-const paymentVerification = async (checkoutData, options) => {
+const paymentVerification = async (checkoutData) => {
   try {
     console.log(currentUser);
     //todo: post request to server to store checkoutData in server
@@ -24,28 +24,32 @@ const checkoutHandler = async (options) => {
   try {
     const checkoutData = await RazorpayCheckout.open(options);
     console.log(checkoutData);
-    paymentVerification(checkoutData, options);
+    paymentVerification(checkoutData);
   } catch (error) {
     console.log("checkout Error:", error.message);
   }
 };
 
-const handleCheckout = async () => {
+export const handleCheckout = async (title, price, userData, subscriptionData) => {
   try {
+    // console.log(price,subscriptionData,userData);
     const { data } = await axios.post(
       "http://10.0.2.2:5001/carwash-60ef0/us-central1/api/orders",
       {
-        amount: 10000,
+        amount: price,
         currency: "INR",
         receipt: "receipt#1",
       }
     );
-    console.log(data);
+    // console.log(data);
     if (data.status == "created") {
       const { amount, id } = data;
       console.log(amount, id);
+      const {displayName,email,phone} = userData;
+      console.log(displayName,email,phone)
+      const phoneNo = "91"+phone
       const options = {
-        description: "Payment for gray Button",
+        description: `Payment for wash service for ${title}`,
         image: "https://i.imgur.com/3g7nmJC.jpg",
         currency: "INR",
         key: "rzp_test_yhb3fVA9vsfWO9",
@@ -53,9 +57,9 @@ const handleCheckout = async () => {
         name: "Frankline Corp",
         order_id: id,
         prefill: {
-          email: "gaurav.kumar@example.com",
-          contact: "9191919191",
-          name: "Gaurav Kumar",
+          email: email,
+          contact: phoneNo,
+          name: displayName,
         },
         theme: { color: "#53a20e" },
       };

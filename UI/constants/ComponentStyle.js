@@ -20,7 +20,7 @@ export const Style = StyleSheet.create({
   },
   textInput: {
     backgroundColor: "#F7F7F9",
-    alignSelf:"center",
+    alignSelf: "center",
     color: "#000000",
     borderRadius: 14,
     height: 65,
@@ -53,7 +53,34 @@ export const Style = StyleSheet.create({
   bottomButtonContainer: {
     width: "80%",
     alignItems: "center",
-    marginTop:"auto",
-    marginBottom:10,
+    marginTop: "auto",
+    marginBottom: 10,
+  },
+  userDetailsContainer: {
+    flex: 1,
+    paddingHorizontal: 20,
+    marginTop: 30,
+  },
+  detailCardContainer: {
+    flexDirection: "row",
+    paddingVertical: 20,
+    // justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: 20,
+    borderRadius: 17,
+    marginVertical: 8,
+    
+    borderBottomWidth: 4,
+    borderWidth: 3,
+  },
+  detailLabel: {
+    color: "black",
+    fontFamily: "Sora_600SemiBold",
+    fontSize: 17,
+  },
+  detailInput: {
+   
+    fontFamily: "Sora_600SemiBold",
+    fontSize: 17,
   },
 }); 

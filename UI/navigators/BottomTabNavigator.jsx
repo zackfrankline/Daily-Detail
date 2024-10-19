@@ -35,7 +35,7 @@ export const BottomTabNavigator = () => {
         name="User Settings"
         component={UserSettings}
         options={{
-          headerShown: true,
+          headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <Icon
               name="car-sport-outline"

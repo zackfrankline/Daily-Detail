@@ -2,13 +2,13 @@ import {
   Dimensions,
   FlatList,
   Image,
-  ImageBackground,
+ 
   KeyboardAvoidingView,
   Platform,
   ScrollView,
   StyleSheet,
   Text,
-  unstable_batchedUpdates,
+  
   View,
 } from "react-native";
 
@@ -19,14 +19,26 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Colors } from "../../constants/colors";
 
 import ButtonComponent from "../../components/button";
-import { Style } from "../../constants/ComponentStyle";
-import { useContext, useState } from "react";
+
+import { useContext } from "react";
 import { AuthContext } from "../../hooks/AuthContext";
 import { VariantContext } from "../../hooks/VariantContext";
-import { productfeatureCardDetails } from "./productFeatures";
+
 import { IMAGES } from "../../assets";
 import FormInputController from "../../components/controllers/FormInputController";
+import { handleCheckout } from "../../services/razropayHandler";
 
+
+const user = {
+  active_subscription: false,
+  address: "57,Bhimatangi,Bhubneswar",
+  buildingName: "57",
+  createdAt: { nanoseconds: 395000000, seconds: 1726840476 },
+  displayName: "Frankline Kispotts",
+  email: "zackfrankline@gmail.com",
+  phone: "8249575138",
+  pincode: "751005",
+};
 
 const FeatureCard = ({ img, title, desc }) => {
   return (
@@ -83,17 +95,13 @@ const VariantDetails = ({ navigation }) => {
   const { userData } = useContext(AuthContext);
   const { currentSelectedVariant } = useContext(VariantContext);
 
-  const { order_id, title,uri,desc , productFeatureDetail } = currentSelectedVariant;
+  const { order_id, title,price, desc , productFeatureDetail } = currentSelectedVariant;
 
-  const handleBookNow = () => {
-    console.log(userData);
-    const newProfile = {vechile_no:vehicleNo,parking_no:parkingNo}
-    console.log(newProfile)
-  };
 
-  const onSubmit = (data) =>{
+  const onSubmit = (subscriptionData) =>{
     // send amount,description, prefil data{email,contact,name} 
-    console.log(data);
+    // console.log(price, subscriptionData, userData);
+    handleCheckout(title, price, userData, subscriptionData);
   }
 
   return (
