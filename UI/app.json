@@ -31,6 +31,11 @@
       "expo-build-properties",
       "@react-native-firebase/app",
       "expo-font"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "c7540309-c5ca-482f-9895-2e2eb888cfde"
+      }
+    }
   }
 }

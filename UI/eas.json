@@ -1,0 +1,32 @@
+{
+  "cli": {
+    "version": ">= 12.5.3",
+    "appVersionSource": "remote"
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal"
+    },
+    "preview": {
+      "android": {
+        "buildType": "apk"
+      },
+      "env": {
+        "EXPO_PUBLIC_FIREBASE_API_KEY": "AIzaSyCrOb_Mv96B5V9Ed15K6VgudNccwQVA3wM",
+        "EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN": "carwash-60ef0.firebaseapp.com",
+        "EXPO_PUBLIC_PROJECT_ID": "carwash-60ef0",
+        "EXPO_PUBLIC_STORAGE_BUCKET": "carwash-60ef0.appspot.com",
+        "EXPO_PUBLIC_MESSAGING_SENDER_ID": "77299325434",
+        "EXPO_PUBLIC_APP_ID": "1:77299325434:web:be14e2cfa74fbe52322c43",
+        "EXPO_PUBLIC_MEASUREMENT_ID": "G-RNZXNWMBRV"
+      }
+    },
+    "production": {
+      "autoIncrement": true
+    }
+  },
+  "submit": {
+    "production": {}
+  }
+}
