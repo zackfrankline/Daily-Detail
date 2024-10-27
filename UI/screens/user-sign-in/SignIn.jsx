@@ -99,6 +99,7 @@ const SignIn = ({ navigation }) => {
                 name="email"
                 control={control}
                 placeholder="Email"
+                isPassword={false}
               />
 
               {errors.email && (
@@ -108,7 +109,8 @@ const SignIn = ({ navigation }) => {
                 name="password"
                 control={control}
                 placeholder="Password"
-                secureTextEntry={true}
+                // secureTextEntry={true}
+                isPassword={true}
               />
               {errors.password && (
                 <Text style={styles.errorMessage}>

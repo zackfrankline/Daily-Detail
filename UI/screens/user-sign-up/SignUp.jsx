@@ -14,7 +14,7 @@ import {
 } from "react-native";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
-import { signUpUserWithEmailAndPassword } from "../../services/fireabse.utils";
+import { sendUserVerificationEmail, signUpUserWithEmailAndPassword } from "../../services/fireabse.utils";
 import { Style } from "../../constants/ComponentStyle";
 import InputField from "../../components/InputField";
 import ButtonComponent from "../../components/button";
@@ -57,7 +57,10 @@ const SignUp = ({ navigation }) => {
   const handleSignUp = async ({email,password}) => {
     try {
       await signUpUserWithEmailAndPassword(email, password);
-      navigation.navigate("SignIn");
+      const emailVerificationData = await sendUserVerificationEmail();
+      console.log(emailVerificationData);
+      // navigation.navigate("SignIn");
+
     } catch (e) {
       console.log("CreateUserWithEmailAndPassword Error:", e);
       handleErrorAlert(e.code);
@@ -105,6 +108,7 @@ const SignUp = ({ navigation }) => {
                 control={control}
                 name="email"
                 placeholder="Enter Email"
+                isPassword={false}
               />
               {errors.email && (
                 <Text style={styles.errorMessage}>{errors.email.message}</Text>
@@ -113,7 +117,7 @@ const SignUp = ({ navigation }) => {
                 control={control}
                 name="password"
                 placeholder="Enter Password"
-                secureTextEntry={true}
+                isPassword={true}
               />
               {errors.password && (
                 <Text style={styles.errorMessage}>
@@ -124,7 +128,7 @@ const SignUp = ({ navigation }) => {
                 control={control}
                 name="confirmPassword"
                 placeholder="Confirm Password"
-                secureTextEntry={true}
+                isPassword={true}
               />
               {errors.confirmPassword && (
                 <Text style={styles.errorMessage}>

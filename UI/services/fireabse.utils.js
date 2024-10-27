@@ -1,6 +1,7 @@
 import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
+  sendEmailVerification,
   signInWithEmailAndPassword,
   signOut,
 } from "firebase/auth";
@@ -22,6 +23,11 @@ export const signInUserWithEmailAndPassword = async (email, password) =>
 //Create User Sign Up with email and password
 export const signUpUserWithEmailAndPassword = async (email, password) =>
   await createUserWithEmailAndPassword(auth, email, password);
+
+//send user verification email
+export const sendUserVerificationEmail = async () => {
+ await sendEmailVerification(auth.currentUser)
+}
 
 //user sign out
 export const signOutUser = async () => await signOut(auth);
