@@ -14,15 +14,23 @@ import {
 } from "react-native";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
-import { sendUserVerificationEmail, signUpUserWithEmailAndPassword } from "../../services/fireabse.utils";
+import {
+  checkUserEmailVerification,
+  sendUserVerificationEmail,
+  signUpUserWithEmailAndPassword,
+} from "../../services/fireabse.utils";
 import { Style } from "../../constants/ComponentStyle";
 import InputField from "../../components/InputField";
 import ButtonComponent from "../../components/button";
 import { Colors } from "../../constants/colors";
 import FormInputController from "../../components/controllers/FormInputController";
 import { yupResolver } from "@hookform/resolvers/yup";
+import EmailVerificationLoading from "../email-verification-loading/emailVerificationLoading";
 
 const SignUp = ({ navigation }) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
   const schema = yup.object().shape({
     email: yup
       .string()
@@ -54,13 +62,13 @@ const SignUp = ({ navigation }) => {
     },
   });
 
-  const handleSignUp = async ({email,password}) => {
+  const handleSignUp = async ({ email, password }) => {
     try {
+      setIsLoading(!isLoading);
+      setIsModalVisible(!isModalVisible);
       await signUpUserWithEmailAndPassword(email, password);
-      const emailVerificationData = await sendUserVerificationEmail();
-      console.log(emailVerificationData);
-      // navigation.navigate("SignIn");
-
+      await sendUserVerificationEmail();
+      
     } catch (e) {
       console.log("CreateUserWithEmailAndPassword Error:", e);
       handleErrorAlert(e.code);
@@ -86,101 +94,115 @@ const SignUp = ({ navigation }) => {
 
   const onSubmit = (data) => handleSignUp(data);
 
+  
+  const handlePress = () => {
+    navigation.navigate("SignIn")
+  };
+
   return (
     <View style={styles.container}>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        style={styles.container}
-        enabled={true}
-      >
-        <ScrollView>
-          <ImageBackground
-            source={require("../../assets/SignUpBackground.png")}
-            resizeMode="cover"
-            style={styles.backgroundImage}
-          >
-            <View style={Style.logInTextContainer}>
-              <Text style={Style.titleText}>Create Account</Text>
-            </View>
+      {isLoading ? (
+        <EmailVerificationLoading
+          isModalVisible={isModalVisible}
+          handlePress={handlePress}
+        />
+      ) : (
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          style={styles.container}
+          enabled={true}
+        >
+          <ScrollView>
+            <ImageBackground
+              source={require("../../assets/SignUpBackground.png")}
+              resizeMode="cover"
+              style={Style.backgroundImage}
+            >
+              <View style={Style.logInTextContainer}>
+                <Text style={Style.titleText}>Create Account</Text>
+              </View>
 
-            <View style={[Style.inputContainer, { marginTop: 70 }]}>
-              <FormInputController
-                control={control}
-                name="email"
-                placeholder="Enter Email"
-                isPassword={false}
-              />
-              {errors.email && (
-                <Text style={styles.errorMessage}>{errors.email.message}</Text>
-              )}
-              <FormInputController
-                control={control}
-                name="password"
-                placeholder="Enter Password"
-                isPassword={true}
-              />
-              {errors.password && (
-                <Text style={styles.errorMessage}>
-                  {errors.password.message}
+              <View style={[Style.inputContainer]}>
+                <FormInputController
+                  control={control}
+                  name="email"
+                  placeholder="Enter Email"
+                  isPassword={false}
+                />
+                {errors.email && (
+                  <Text style={styles.errorMessage}>
+                    {errors.email.message}
+                  </Text>
+                )}
+                <FormInputController
+                  control={control}
+                  name="password"
+                  placeholder="Enter Password"
+                  isPassword={true}
+                />
+                {errors.password && (
+                  <Text style={styles.errorMessage}>
+                    {errors.password.message}
+                  </Text>
+                )}
+                <FormInputController
+                  control={control}
+                  name="confirmPassword"
+                  placeholder="Confirm Password"
+                  isPassword={true}
+                />
+                {errors.confirmPassword && (
+                  <Text style={styles.errorMessage}>
+                    {errors.confirmPassword.message}
+                  </Text>
+                )}
+                <Text
+                  style={[
+                    Style.secondaryText,
+                    {
+                      color: "#f7f7f9",
+                      marginTop: 5,
+                      marginLeft: 5,
+                      alignSelf: "flex-start",
+                      flexDirection: "row",
+                      width: "100%",
+                    },
+                  ]}
+                >
+                  Password must be 8 characters.
                 </Text>
-              )}
-              <FormInputController
-                control={control}
-                name="confirmPassword"
-                placeholder="Confirm Password"
-                isPassword={true}
-              />
-              {errors.confirmPassword && (
-                <Text style={styles.errorMessage}>
-                  {errors.confirmPassword.message}
-                </Text>
-              )}
-              <Text
-                style={[
-                  Style.secondaryText,
-                  {
-                    color: "#f7f7f9",
-                    marginTop: 5,
-                    marginLeft: 5,
-                    alignSelf: "flex-start",
-                    flexDirection: "row",
-                    width: "100%",
-                  },
-                ]}
-              >
-                Password must be 8 characters.
-              </Text>
-            </View>
+              </View>
 
-            <View style={[Style.bottomButtonContainer]}>
-              <ButtonComponent
-                onPress={handleSubmit(onSubmit)}
-                color={Colors.accentColor}
-                text="Sign Up"
-              />
-              <Text
-                style={[
-                  Style.secondaryText,
-                  {
-                    color: "#3c3c3c",
-                  },
-                ]}
-              >
-                Already have an account?
-              </Text>
-              <Pressable
-                onPress={() => {
-                  navigation.navigate("SignIn");
-                }}
-              >
-                <Text style={[Style.secondaryText, { color: "#F1916D" }]}>
-                  Log In
+              <View style={[Style.bottomButtonContainer]}>
+                <ButtonComponent
+                  onPress={handleSubmit(onSubmit)}
+                  color={Colors.accentColor}
+                  text="Sign Up"
+                />
+                <Text
+                  style={[
+                    Style.secondaryText,
+                    {
+                      color: "#3c3c3c",
+                    },
+                  ]}
+                >
+                  Already have an account?
                 </Text>
-              </Pressable>
-            </View>
-          </ImageBackground>
-        </ScrollView>
-      </KeyboardAvoidingView>
+                <Pressable
+                  onPress={() => {
+                    navigation.navigate("SignIn");
+                  }}
+                >
+                  <Text style={[Style.secondaryText, { color: "#F1916D" }]}>
+                    Log In
+                  </Text>
+                </Pressable>
+              </View>
+            </ImageBackground>
+          </ScrollView>
+        </KeyboardAvoidingView>
+      )}
     </View>
   );
 };
@@ -188,18 +210,10 @@ const SignUp = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    // borderWidth:5,
+    // borderColor:"red"
   },
-  scrollViewContainer: {
-    flex: 1,
-    height: "1vh",
-  },
-  backgroundImage: {
-    alignItems: "center",
-    left: 0,
-    top: 0,
-    width: Dimensions.get("window").width,
-    height: Dimensions.get("window").height,
-  },
+  
   SignUpTextContainer: {
     alignSelf: "flex-start",
     marginLeft: 35,

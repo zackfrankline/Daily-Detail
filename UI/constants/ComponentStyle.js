@@ -1,6 +1,15 @@
-import { StyleSheet } from "react-native";
+import { Dimensions, StyleSheet } from "react-native";
+
+const {width,height} = Dimensions.get("screen");
 
 export const Style = StyleSheet.create({
+  backgroundImage: {
+    alignItems: "center",
+    left: 0,
+    top: 0,
+    width: Dimensions.get("window").width,
+    height: Dimensions.get("screen").height,
+  },
   button: {
     alignItems: "center",
     justifyContent: "center",
@@ -14,13 +23,13 @@ export const Style = StyleSheet.create({
     elevation: 8,
   },
   inputContainer: {
-    marginTop: 60,
+    marginTop: height * 0.128,
     marginHorizontal: 100,
     alignItems: "center",
   },
   textInput: {
     backgroundColor: "#F7F7F9",
-    alignSelf:"center",
+    alignSelf: "center",
     color: "#000000",
     borderRadius: 14,
     height: 65,
@@ -48,12 +57,12 @@ export const Style = StyleSheet.create({
   logInTextContainer: {
     alignSelf: "flex-start",
     marginLeft: 35,
-    marginTop: 170,
+    marginTop: height * 0.2,
   },
   bottomButtonContainer: {
     width: "80%",
     alignItems: "center",
-    marginTop:"auto",
-    marginBottom:10,
+    marginTop: "auto",
+    marginBottom: height * 0.05,
   },
 }); 

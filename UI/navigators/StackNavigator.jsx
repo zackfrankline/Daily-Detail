@@ -9,6 +9,7 @@ import { useContext } from "react";
 import { BottomTabNavigator } from "./BottomTabNavigator";
 import VariantDetails from "../screens/variant-page/variant-details";
 import Variant from "../screens/variant-selection-screen/variant-selection.component";
+import EmailVerificationLoading from "../screens/email-verification-loading/emailVerificationLoading";
 
 const Stack = createNativeStackNavigator();
 
@@ -16,7 +17,7 @@ const StackNavigator = () => {
   const { currentUser } = useContext(AuthContext);
   return (
     // <Stack.Navigator initialRouteName={currentUser ? "Variant-detail" : "Home"}>
-     <Stack.Navigator initialRouteName="Home"> 
+    <Stack.Navigator initialRouteName="Email-verificaiton">
       <Stack.Screen
         name="Home"
         component={HomeScreen}
@@ -57,6 +58,11 @@ const StackNavigator = () => {
         component={VariantDetails}
         options={{ headerShown: false }}
       />
+      {/* <Stack.Screen
+        name="Email-verificaiton"
+        component={EmailVerificationLoading}
+        options={{ headerShown: false }}
+      /> */}
     </Stack.Navigator>
   );
 };

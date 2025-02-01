@@ -29,6 +29,10 @@ export const sendUserVerificationEmail = async () => {
  await sendEmailVerification(auth.currentUser)
 }
 
+export const checkUserEmailVerification = () => {
+   return auth.currentUser.emailVerified;
+}
+
 //user sign out
 export const signOutUser = async () => await signOut(auth);
 

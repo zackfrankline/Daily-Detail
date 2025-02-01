@@ -13,11 +13,12 @@ import {
   View,
 } from "react-native";
 
-import {useForm} from "react-hook-form";
-import * as yup from "yup"
+import { useForm } from "react-hook-form";
+import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 import {
+  checkUserEmailVerification,
   signInUserWithEmailAndPassword,
   signOutUser,
 } from "../../services/fireabse.utils";
@@ -28,43 +29,61 @@ import InputField from "../../components/InputField";
 import ButtonComponent from "../../components/button";
 import { Colors } from "../../constants/colors";
 import FormInputController from "../../components/controllers/FormInputController";
+import EmailVerificationLoading from "../email-verification-loading/emailVerificationLoading";
 
 const SignIn = ({ navigation }) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   const schema = yup.object().shape({
-    email:yup.string().trim().required("Email is required").email('Invalid email'),
-    password:yup.string().trim().required("Password is required").min(8,"Password must contain at least 8 characters"),
+    email: yup
+      .string()
+      .trim()
+      .required("Email is required")
+      .email("Invalid email"),
+    password: yup
+      .string()
+      .trim()
+      .required("Password is required")
+      .min(8, "Password must contain at least 8 characters"),
   });
-  
+
   const {
     control,
     handleSubmit,
     formState: { errors },
   } = useForm({
-    resolver:yupResolver(schema),
+    resolver: yupResolver(schema),
     defaultValues: {
       email: "",
       password: "",
     },
   });
 
-
-
   const { currentUser } = useContext(AuthContext);
 
   const handleErrorAlert = (errorCode) => {
-    Alert.alert(
-      "Error",
-      `${errorCode}`,
-    );
+    Alert.alert("Error", `${errorCode}`);
   };
 
-  const handleSignIn = async ({email,password}) => {
+  const handleSignIn = async ({ email, password }) => {
     try {
-      const { user } = await signInUserWithEmailAndPassword(email, password);
-      user && navigation.navigate("Welcome");
+      await signInUserWithEmailAndPassword(email, password);
     } catch (err) {
       handleErrorAlert(err.code);
+    }
+  };
+
+  const handleEmailVerification = () => {
+    const response = checkUserEmailVerification();
+    console.log(response);
+    if (response) {
+      console.log(response);
+      setIsModalVisible(!isModalVisible);
+      setIsLoading(!isLoading);
+      navigation.navigate("Welcome");
+    } else {
+      alert("User email not verified");
     }
   };
 
@@ -72,100 +91,115 @@ const SignIn = ({ navigation }) => {
     await signOutUser();
   };
 
-  const onSubmit = (data) => handleSignIn(data); 
+  const onSubmit = (data) => handleSignIn(data);
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={styles.container}
-      enabled={true}
-    >
-      <ScrollView contentContainerStyle={styles.scrollViewContainer}>
-        <ImageBackground
-          source={require("../../assets/LogInbackground.png")}
-          resizeMode="cover"
-          style={[styles.backgroundImage]}
+    <View>
+      {isLoading ? (
+        <EmailVerificationLoading
+          isModalVisible={isModalVisible}
+          handlePress={handleEmailVerification}
+        />
+      ) : (
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          style={styles.container}
+          enabled={true}
         >
-          <>
-            <View style={Style.logInTextContainer}>
-              <Text style={Style.titleText}>Log In</Text>
-              <Text style={Style.secondaryText}>
-                Please Sign In to continue
-              </Text>
-            </View>
+          <ScrollView contentContainerStyle={styles.scrollViewContainer}>
+            <ImageBackground
+              source={require("../../assets/LogInbackground.png")}
+              resizeMode="cover"
+              style={[Style.backgroundImage]}
+            >
+              <>
+                <View style={Style.logInTextContainer}>
+                  <Text style={Style.titleText}>Log In</Text>
+                  <Text style={Style.secondaryText}>
+                    Please Sign In to continue
+                  </Text>
+                </View>
 
-            <View style={Style.inputContainer}>
-              <FormInputController
-                name="email"
-                control={control}
-                placeholder="Email"
-                isPassword={false}
-              />
+                <View style={Style.inputContainer}>
+                  <FormInputController
+                    name="email"
+                    control={control}
+                    placeholder="Email"
+                    isPassword={false}
+                  />
 
-              {errors.email && (
-                <Text style={styles.errorMessage}>{errors.email.message}</Text>
-              )}
-              <FormInputController
-                name="password"
-                control={control}
-                placeholder="Password"
-                // secureTextEntry={true}
-                isPassword={true}
-              />
-              {errors.password && (
-                <Text style={styles.errorMessage}>
-                  {errors.password.message}
-                </Text>
-              )}
-              <Pressable style={{ alignSelf: "flex-end", backgroundColor:Colors.buttonColor }}>
-                <Text
-                  style={[
-                    Style.secondaryText,
-                    {
-                      color: Colors.accentColor,
-                      fontSize: 16,
-                      marginTop: 5,
-                    },
-                  ]}
-                >
-                  Forget Password?
-                </Text>
-              </Pressable>
-            </View>
+                  {errors.email && (
+                    <Text style={styles.errorMessage}>
+                      {errors.email.message}
+                    </Text>
+                  )}
+                  <FormInputController
+                    name="password"
+                    control={control}
+                    placeholder="Password"
+                    // secureTextEntry={true}
+                    isPassword={true}
+                  />
+                  {errors.password && (
+                    <Text style={styles.errorMessage}>
+                      {errors.password.message}
+                    </Text>
+                  )}
+                  <Pressable
+                    style={{
+                      alignSelf: "flex-end",
+                      backgroundColor: Colors.buttonColor,
+                    }}
+                  >
+                    <Text
+                      style={[
+                        Style.secondaryText,
+                        {
+                          color: Colors.accentColor,
+                          fontSize: 16,
+                          marginTop: 5,
+                        },
+                      ]}
+                    >
+                      Forget Password?
+                    </Text>
+                  </Pressable>
+                </View>
 
-            <View style={Style.bottomButtonContainer}>
-              
-              <ButtonComponent
-                text="Log In"
-                onPress={handleSubmit(onSubmit)}
-                color={Colors.buttonColor}
-                disabled={false}
-              />
+                <View style={Style.bottomButtonContainer}>
+                  <ButtonComponent
+                    text="Log In"
+                    onPress={handleSubmit(onSubmit)}
+                    color={Colors.buttonColor}
+                    disabled={false}
+                  />
 
-              <Text
-                style={[
-                  Style.secondaryText,
-                  {
-                    color: "#3c3c3c",
-                  },
-                ]}
-              >
-                Don't have an account?
-              </Text>
-              <Pressable
-                onPress={() => {
-                  navigation.navigate("SignUp");
-                }}
-              >
-                <Text style={[Style.secondaryText, { color: "#F1916D" }]}>
-                  Sign Up
-                </Text>
-              </Pressable>
-            </View>
-          </>
-        </ImageBackground>
-      </ScrollView>
-    </KeyboardAvoidingView>
+                  <Text
+                    style={[
+                      Style.secondaryText,
+                      {
+                        color: "#3c3c3c",
+                      },
+                    ]}
+                  >
+                    Don't have an account?
+                  </Text>
+                  <Pressable
+                    onPress={() => {
+                      navigation.navigate("SignUp");
+                    }}
+                  >
+                    <Text style={[Style.secondaryText, { color: "#F1916D" }]}>
+                      Sign Up
+                    </Text>
+                  </Pressable>
+                </View>
+              </>
+            </ImageBackground>
+          </ScrollView>
+        </KeyboardAvoidingView>
+      )}
+    </View>
   );
 };
 
@@ -182,11 +216,11 @@ const styles = StyleSheet.create({
     width: Dimensions.get("window").width,
     height: Dimensions.get("window").height,
   },
-  errorMessage:{
-    textAlign:"left",
-    alignSelf:"flex-start",
+  errorMessage: {
+    textAlign: "left",
+    alignSelf: "flex-start",
     // borderWidth:3,
-    width:"100%",
-    color:"orange",
-  }
+    width: "100%",
+    color: "orange",
+  },
 });
